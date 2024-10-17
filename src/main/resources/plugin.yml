@@ -1,0 +1,11 @@
+main: com.bubbaj2016.darkmc.Plugin
+name: darkmc
+version: 1.0
+
+commands:
+    helloWorld:
+        description: Hello, World!
+        usage: /<command>
+    WandCommand:
+        description: gives special wand
+        usage: /<command>
