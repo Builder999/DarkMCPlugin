@@ -1,11 +1,14 @@
 package com.bubbaj2016.darkmc.listeners;
 
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
+import org.bukkit.block.data.Bisected;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.Bisected.Half;
@@ -20,7 +23,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+
+import com.bubbaj2016.darkmc.DoorLoc;
 import com.bubbaj2016.darkmc.ItemManager;
+import com.bubbaj2016.darkmc.Utilities;
 
 
 
@@ -37,6 +43,8 @@ public class RightClickHandler implements Listener{
                         if (door.getHalf() == Half.TOP){
                             loc = loc.subtract(0, 1, 0);
                         }
+                        loc = Utilities.stripRotation(loc);
+                        DoorLoc doorLoc = new DoorLoc(event.getPlayer().getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
                         event.setCancelled(true);
                         Directional direction = (Directional) event.getClickedBlock().getBlockData();
 
@@ -58,10 +66,33 @@ public class RightClickHandler implements Listener{
                         display.setText("Owned By: " + player.getName());
                         display.setVisibleByDefault(true);
                         display.setBillboard(Billboard.CENTER);
-                        DoorHandler.addDoor(loc, display.getUniqueId().toString());
+                        DoorHandler.addDoor(doorLoc, display.getUniqueId().toString());
                         DoorHandler.addOwner(display.getUniqueId().toString(), event.getPlayer().getUniqueId().toString());
-                        Bukkit.getServer().getLogger().info(DoorHandler.getSignFromDoorLoc(loc));
                     }
+                }
+            }
+
+
+            if (event.getItem() == null){
+                if (event.getClickedBlock().getType() == Material.OAK_DOOR){
+                    Bisected bisect = (Bisected) event.getClickedBlock().getBlockData();
+                    Location loc = event.getClickedBlock().getLocation();
+                    if (bisect.getHalf() == Half.TOP){
+                        loc = loc.subtract(0, 1, 0);
+                    }
+                    DoorLoc doorLocation = new DoorLoc(event.getPlayer().getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
+                    String idString = DoorHandler.getSignFromDoorLoc(doorLocation);
+
+                    if (DoorHandler.getSignFromDoorLoc(doorLocation) == null){
+                        Bukkit.getServer().broadcastMessage("Null");
+                    }
+                    else {
+                        Bukkit.getServer().broadcastMessage(idString);
+                    }
+                    
+                    Entity signEnt = Utilities.getEntityByUniqueId(UUID.fromString(idString));
+                    TextDisplay sign = (TextDisplay) signEnt;
+                    Bukkit.getServer().broadcastMessage(sign.getText());
                 }
             }
             
