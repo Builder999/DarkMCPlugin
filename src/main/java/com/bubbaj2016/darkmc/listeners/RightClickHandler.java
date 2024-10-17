@@ -63,11 +63,26 @@ public class RightClickHandler implements Listener{
                             loc = loc.add(1.5, 1, 0);
                         }
                         TextDisplay display = event.getPlayer().getWorld().spawn(loc, TextDisplay.class);
-                        display.setText("Owned By: " + player.getName());
+                        display.setText("Owned By: ");
                         display.setVisibleByDefault(true);
                         display.setBillboard(Billboard.CENTER);
                         DoorHandler.addDoor(doorLoc, display.getUniqueId().toString());
-                        DoorHandler.addOwner(display.getUniqueId().toString(), event.getPlayer().getUniqueId().toString());
+                    }
+                }
+
+                else if (event.getItem().getItemMeta().equals(ItemManager.key.getItemMeta())){
+                    if (event.getClickedBlock().getType() == Material.OAK_DOOR){
+                        Location loc = event.getClickedBlock().getLocation();
+                        Bisected bisect = (Bisected) event.getClickedBlock().getBlockData();
+                        if (bisect.getHalf() == Half.TOP){
+                            loc = loc.subtract(0, 1, 0);
+                        }
+                        DoorLoc doorLoc = new DoorLoc(loc);
+                        if (DoorHandler.doorAdded(doorLoc)){
+                            if(DoorHandler.getDoorOwner(doorLoc).equals("")){
+                                DoorHandler.setOwner(doorLoc, event.getPlayer().getUniqueId().toString());
+                            }
+                        }
                     }
                 }
             }
@@ -80,22 +95,10 @@ public class RightClickHandler implements Listener{
                     if (bisect.getHalf() == Half.TOP){
                         loc = loc.subtract(0, 1, 0);
                     }
-                    DoorLoc doorLocation = new DoorLoc(event.getPlayer().getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
-                    String idString = DoorHandler.getSignFromDoorLoc(doorLocation);
-
-                    if (DoorHandler.getSignFromDoorLoc(doorLocation) == null){
-                        Bukkit.getServer().broadcastMessage("Null");
-                    }
-                    else {
-                        Bukkit.getServer().broadcastMessage(idString);
-                    }
-                    
-                    Entity signEnt = Utilities.getEntityByUniqueId(UUID.fromString(idString));
-                    TextDisplay sign = (TextDisplay) signEnt;
-                    Bukkit.getServer().broadcastMessage(sign.getText());
+                    DoorLoc doorLocation = new DoorLoc(loc);
+                    Bukkit.getServer().broadcastMessage(DoorHandler.getDoorOwner(doorLocation));
                 }
-            }
-            
+            }            
         }
         
         

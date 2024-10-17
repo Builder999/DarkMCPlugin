@@ -1,5 +1,8 @@
 package com.bubbaj2016.darkmc;
 
+import java.time.LocalDate;
+
+import org.bukkit.Location;
 import org.bukkit.World;
 
 public class DoorLoc {
@@ -13,6 +16,13 @@ public class DoorLoc {
         this.x = x;
         this.y = y;
         this.z = z;
+    }
+
+    public DoorLoc(Location loc){
+        this.world = loc.getWorld();
+        this.x = loc.getBlockX();
+        this.y = loc.getBlockY();
+        this.z = loc.getBlockZ();
     }
 
     @Override

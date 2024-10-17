@@ -6,43 +6,49 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.TextDisplay;
 import org.bukkit.util.io.BukkitObjectInputStream;
 
+import com.bubbaj2016.darkmc.DarkMCDoor;
 import com.bubbaj2016.darkmc.DoorLoc;
+import com.bubbaj2016.darkmc.Utilities;
 public class DoorHandler {
-    static ArrayList<String> doors = new ArrayList<>();
-    static HashMap<DoorLoc, String> doorInfo = new HashMap<>();
-    static HashMap<String, String> ownerInfo = new HashMap<>();
+    static ArrayList<DarkMCDoor> doors = new ArrayList<>();
     public static void addDoor(DoorLoc doorLoc,String UUID){
-        doorInfo.put(doorLoc, UUID);
-        Bukkit.getServer().broadcastMessage(doorInfo.toString());
+        DarkMCDoor door = new DarkMCDoor(doorLoc, UUID);
+        doors.add(door);
     }
 
-    public static void addOwner(String signUUID, String ownerUUID){
-        ownerInfo.put(signUUID, ownerUUID);
-        Bukkit.getServer().broadcastMessage(ownerInfo.toString());
-
+    public static void setOwner(DoorLoc loc, String ownerUUID){
+        DarkMCDoor door = new DarkMCDoor(loc, ownerUUID);
+        for (int i = 0; i < doors.size(); i++){
+            if (doors.get(i).getDoorLoc().equals(loc)){
+               door = doors.get(i); 
+            }  
+        }
+        door.setOwner(ownerUUID);
+        Entity signEnt = Utilities.getEntityByUniqueId(UUID.fromString(door.getSignID()));
+        TextDisplay display = (TextDisplay) signEnt;
+        display.setText("Owned by: " + Bukkit.getPlayer(UUID.fromString(ownerUUID)).getName());
     }
-    public static void removeOwner(String signUUID){
-        ownerInfo.put(signUUID, "");
-    }
 
-    public static DoorLoc getDoorLocFromSignUUID(String UUID){
-        for (DoorLoc loc : doorInfo.keySet()){
-            if (doorInfo.get(loc).equals(UUID)){
-                return loc;
+    public static String getDoorOwner(DoorLoc loc){
+        for (int i = 0; i < doors.size(); i++){
+            if (doors.get(i).getDoorLoc().equals(loc)){
+                return doors.get(i).getOwner();
             }
         }
-        return null;
+        return "";
     }
 
-    public static String getOwnerUUIDFromSignUUID(String UUID){
-        return ownerInfo.get(UUID);
-    }
-
-    public static String getSignFromDoorLoc(DoorLoc loc){
-        Bukkit.broadcastMessage(loc.toString());
-        return doorInfo.get(loc);
+    public static boolean doorAdded(DoorLoc loc){
+        for (DarkMCDoor darkMCDoor : doors) {
+            if (darkMCDoor.getDoorLoc().equals(loc)){
+                return true;
+            }
+        }
+        return false;
     }
 
 }
