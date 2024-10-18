@@ -26,7 +26,12 @@ public class DoorHandler {
         door.setOwner(ownerUUID);
         Entity signEnt = Utilities.getEntityByUniqueId(UUID.fromString(door.getSignID()));
         TextDisplay display = (TextDisplay) signEnt;
-        display.setText("Owned by: " + Bukkit.getPlayer(UUID.fromString(ownerUUID)).getName());
+        if (ownerUUID.equals("")){
+            display.setText("Owned by: ");
+        }
+        else {
+            display.setText("Owned by: " + Bukkit.getPlayer(UUID.fromString(ownerUUID)).getName());
+        }
     }
 
     public static String getDoorOwner(DoorLoc loc){
@@ -42,6 +47,23 @@ public class DoorHandler {
         for (DarkMCDoor darkMCDoor : doors) {
             if (darkMCDoor.getDoorLoc().equals(loc)){
                 return true;
+            }
+        }
+        return false;
+    }
+
+    public static void toggleLock(DoorLoc loc){
+        for (DarkMCDoor darkMCDoor : doors) {
+            if (darkMCDoor.getDoorLoc().equals(loc)){
+                darkMCDoor.setLocked(!darkMCDoor.locked());
+            }
+        }
+    }
+
+    public static boolean getLocked(DoorLoc loc){
+        for (DarkMCDoor darkMCDoor : doors) {
+            if (darkMCDoor.getDoorLoc().equals(loc)){
+                return darkMCDoor.locked();
             }
         }
         return false;

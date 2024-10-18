@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Server.Spigot;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
@@ -28,6 +29,9 @@ import com.bubbaj2016.darkmc.DoorHandler;
 import com.bubbaj2016.darkmc.DoorLoc;
 import com.bubbaj2016.darkmc.ItemManager;
 import com.bubbaj2016.darkmc.Utilities;
+
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 
 
 
@@ -80,8 +84,18 @@ public class RightClickHandler implements Listener{
                         }
                         DoorLoc doorLoc = new DoorLoc(loc);
                         if (DoorHandler.doorAdded(doorLoc)){
-                            if(DoorHandler.getDoorOwner(doorLoc).equals("")){
-                                DoorHandler.setOwner(doorLoc, event.getPlayer().getUniqueId().toString());
+                            // if(DoorHandler.getDoorOwner(doorLoc).equals("")){
+                            //     DoorHandler.setOwner(doorLoc, event.getPlayer().getUniqueId().toString());
+                            // }
+                             if (DoorHandler.getDoorOwner(doorLoc).equals(event.getPlayer().getUniqueId().toString())){
+                                DoorHandler.toggleLock(doorLoc);
+                                if (DoorHandler.getLocked(doorLoc)){
+                                    event.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("Locked"));
+                                }
+                                else {
+                                    event.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("Unlocked"));
+                                }
+                                event.setCancelled(true);
                             }
                         }
                     }
@@ -97,7 +111,11 @@ public class RightClickHandler implements Listener{
                         loc = loc.subtract(0, 1, 0);
                     }
                     DoorLoc doorLocation = new DoorLoc(loc);
-                    Bukkit.getServer().broadcastMessage(DoorHandler.getDoorOwner(doorLocation));
+                    if(DoorHandler.doorAdded(doorLocation)){
+                        if (DoorHandler.getLocked(doorLocation)){
+                            event.setCancelled(true);
+                        }
+                    }
                 }
             }            
         }

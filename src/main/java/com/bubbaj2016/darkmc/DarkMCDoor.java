@@ -1,10 +1,10 @@
 package com.bubbaj2016.darkmc;
 
 public class DarkMCDoor {
-    DoorLoc doorLoc;
-    String signID;
-    String owner = "";
-    boolean locked = false;
+    private DoorLoc doorLoc;
+    private String signID;
+    private String owner = "";
+    private boolean locked = false;
     public DarkMCDoor(DoorLoc loc, String signID){
         doorLoc = loc;
         this.signID = signID;
