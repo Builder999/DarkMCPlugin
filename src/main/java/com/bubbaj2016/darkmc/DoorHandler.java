@@ -1,4 +1,4 @@
-package com.bubbaj2016.darkmc.listeners;
+package com.bubbaj2016.darkmc;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,10 +9,6 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.TextDisplay;
 import org.bukkit.util.io.BukkitObjectInputStream;
-
-import com.bubbaj2016.darkmc.DarkMCDoor;
-import com.bubbaj2016.darkmc.DoorLoc;
-import com.bubbaj2016.darkmc.Utilities;
 public class DoorHandler {
     static ArrayList<DarkMCDoor> doors = new ArrayList<>();
     public static void addDoor(DoorLoc doorLoc,String UUID){

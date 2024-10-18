@@ -24,6 +24,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
+import com.bubbaj2016.darkmc.DoorHandler;
 import com.bubbaj2016.darkmc.DoorLoc;
 import com.bubbaj2016.darkmc.ItemManager;
 import com.bubbaj2016.darkmc.Utilities;
