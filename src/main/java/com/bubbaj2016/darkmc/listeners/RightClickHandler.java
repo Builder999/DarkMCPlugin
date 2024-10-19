@@ -111,34 +111,37 @@ public class RightClickHandler implements Listener{
                 else if (event.getItem().getItemMeta().getDisplayName().equals(ItemManager.locWand.getItemMeta().getDisplayName())){
                     ItemMeta meta = event.getItem().getItemMeta();
 
-                    if (meta.getPersistentDataContainer().has(NamespacedKey.fromString("x2"))){
+                    if (meta.getPersistentDataContainer().has(new NamespacedKey(Plugin.getPlugin(), "x2"))){
                         if (event.getClickedBlock().getType() == Material.OAK_DOOR){
+                            Bukkit.getServer().broadcastMessage("Assigning Door");
                             DoorLoc doorLoc = new DoorLoc(event.getClickedBlock().getLocation());
                             if (DoorHandler.doorAdded(doorLoc)) {
                                 PersistentDataContainer con = event.getItem().getItemMeta().getPersistentDataContainer();
-                                DoorLoc loc1 = new DoorLoc(event.getPlayer().getWorld(), con.get(NamespacedKey.fromString("x1",Plugin.plugin), PersistentDataType.INTEGER), con.get(NamespacedKey.fromString("y1"), PersistentDataType.INTEGER), con.get(NamespacedKey.fromString("z1"), PersistentDataType.INTEGER));
-                                DoorLoc loc2 = new DoorLoc(event.getPlayer().getWorld(), con.get(NamespacedKey.fromString("x2"), PersistentDataType.INTEGER), con.get(NamespacedKey.fromString("y2"), PersistentDataType.INTEGER), con.get(NamespacedKey.fromString("z2"), PersistentDataType.INTEGER));
+                                DoorLoc loc1 = new DoorLoc(event.getPlayer().getWorld(), con.get(new NamespacedKey(Plugin.getPlugin(), "x1"), PersistentDataType.INTEGER), con.get(new NamespacedKey(Plugin.getPlugin(), "y1"), PersistentDataType.INTEGER), con.get(new NamespacedKey(Plugin.getPlugin(), "z1"), PersistentDataType.INTEGER));
+                                DoorLoc loc2 = new DoorLoc(event.getPlayer().getWorld(), con.get(new NamespacedKey(Plugin.getPlugin(), "x2"), PersistentDataType.INTEGER), con.get(new NamespacedKey(Plugin.getPlugin(), "y2"), PersistentDataType.INTEGER), con.get(new NamespacedKey(Plugin.getPlugin(), "z2"), PersistentDataType.INTEGER));
                                 DoorHandler.setArea(loc1, loc2, doorLoc);
                                 Bukkit.getServer().broadcastMessage(DoorHandler.getDoorByLoc(doorLoc).printLocs());
                             }
                         }
-                        meta.getPersistentDataContainer().remove(NamespacedKey.fromString("x1", Plugin.plugin));
-                        meta.getPersistentDataContainer().remove(NamespacedKey.fromString("x2"));
+                        meta.getPersistentDataContainer().remove(new NamespacedKey(Plugin.getPlugin(), "x1"));
+                        meta.getPersistentDataContainer().remove(new NamespacedKey(Plugin.getPlugin(), "x2"));
                     }
                     else {
                         if (!meta.getPersistentDataContainer().has(new NamespacedKey(Plugin.getPlugin(), "x1"))){ 
                             meta.getPersistentDataContainer().set(new NamespacedKey(Plugin.getPlugin(), "x1"), PersistentDataType.INTEGER, event.getClickedBlock().getLocation().getBlockX());
-                            meta.getPersistentDataContainer().set(NamespacedKey.fromString("y1"), PersistentDataType.INTEGER, event.getClickedBlock().getLocation().getBlockY());
-                            meta.getPersistentDataContainer().set(NamespacedKey.fromString("z1"), PersistentDataType.INTEGER, event.getClickedBlock().getLocation().getBlockZ());
+                            meta.getPersistentDataContainer().set(new NamespacedKey(Plugin.getPlugin(), "y1"), PersistentDataType.INTEGER, event.getClickedBlock().getLocation().getBlockY());
+                            meta.getPersistentDataContainer().set(new NamespacedKey(Plugin.getPlugin(), "z1"), PersistentDataType.INTEGER, event.getClickedBlock().getLocation().getBlockZ());
+                            Bukkit.getServer().broadcastMessage("Assigning Loc 1");
+
                         }
-                        else if (!meta.getPersistentDataContainer().has(NamespacedKey.fromString("x2", Plugin.plugin))){
-                            meta.getPersistentDataContainer().set(NamespacedKey.fromString("x2", Plugin.plugin), PersistentDataType.INTEGER, event.getClickedBlock().getLocation().getBlockX());
-                            meta.getPersistentDataContainer().set(NamespacedKey.fromString("y2"), PersistentDataType.INTEGER, event.getClickedBlock().getLocation().getBlockY());
-                            meta.getPersistentDataContainer().set(NamespacedKey.fromString("z2"), PersistentDataType.INTEGER, event.getClickedBlock().getLocation().getBlockZ());
+                        else if (!meta.getPersistentDataContainer().has(new NamespacedKey(Plugin.getPlugin(), "x2"))){
+                            meta.getPersistentDataContainer().set(new NamespacedKey(Plugin.getPlugin(), "x2"), PersistentDataType.INTEGER, event.getClickedBlock().getLocation().getBlockX());
+                            meta.getPersistentDataContainer().set(new NamespacedKey(Plugin.getPlugin(), "y2"), PersistentDataType.INTEGER, event.getClickedBlock().getLocation().getBlockY());
+                            meta.getPersistentDataContainer().set(new NamespacedKey(Plugin.getPlugin(), "z2"), PersistentDataType.INTEGER, event.getClickedBlock().getLocation().getBlockZ());
+                            Bukkit.getServer().broadcastMessage("Assigning Loc 2");
                         }
                     }
                     event.getItem().setItemMeta(meta);
-                    Bukkit.getServer().broadcastMessage(event.getItem().getItemMeta().getPersistentDataContainer().get(new NamespacedKey(Plugin.getPlugin(), "x1"), PersistentDataType.INTEGER).toString());
                 }
             }
 
