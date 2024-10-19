@@ -69,4 +69,20 @@ public class DoorHandler {
         return false;
     }
 
+    public static void setArea(DoorLoc loc1, DoorLoc loc2, DoorLoc loc){
+        for (DarkMCDoor darkMCDoor : doors) {
+            if (darkMCDoor.getDoorLoc().equals(loc)){
+                darkMCDoor.setLocs(loc1, loc2);
+            }
+        }
+    }
+
+    public static DarkMCDoor getDoorByLoc(DoorLoc loc){
+        for (DarkMCDoor darkMCDoor : doors) {
+            if (darkMCDoor.getDoorLoc().equals(loc)){
+                return darkMCDoor;
+            }
+        }
+        return null;
+    }
 }

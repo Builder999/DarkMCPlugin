@@ -12,3 +12,7 @@ commands:
     KeyCommand:
         description: gives key
         usage: /<command>
+    LocWandCommand:
+        description: gives Loc Wand
+        usage: /<command>
+    

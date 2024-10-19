@@ -3,6 +3,7 @@ package com.bubbaj2016.darkmc;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.bubbaj2016.darkmc.commands.KeyCommand;
+import com.bubbaj2016.darkmc.commands.LocWandCommand;
 import com.bubbaj2016.darkmc.commands.WandCommand;
 import com.bubbaj2016.darkmc.listeners.BlockBreakHandler;
 import com.bubbaj2016.darkmc.listeners.RightClickHandler;
@@ -22,11 +23,16 @@ public class Plugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ShiftRightClickHandler(), this);
         getCommand("KeyCommand").setExecutor(new KeyCommand());
         getCommand("WandCommand").setExecutor(new WandCommand());
+        getCommand("LocWandCommand").setExecutor(new LocWandCommand());
         ItemManager.init();
+        plugin = this;
 
     }
     @Override
     public void onDisable() {
         getLogger().info("Plugin is Disabling!");
+    }
+    public static JavaPlugin getPlugin() {
+        return plugin;
     }
 }

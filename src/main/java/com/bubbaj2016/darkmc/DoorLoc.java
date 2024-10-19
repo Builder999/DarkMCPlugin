@@ -53,4 +53,14 @@ public class DoorLoc {
         code += 19*this.z;
         return code;
     }
+
+    @Override
+    public String toString() {
+        return "X: " + x + " Y: " + y + " Z: " + z + "World: " + world;
+    }
+
+    public static DoorLoc fromString(String string){
+        
+        return null;
+    }
 }
