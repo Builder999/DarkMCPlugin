@@ -85,4 +85,17 @@ public class DoorHandler {
         }
         return null;
     }
+
+
+    public static boolean allowedToPlace(DoorLoc locOfPlacement, String playerUUID){
+        for (DarkMCDoor darkMCDoor : doors) {
+            if (darkMCDoor.getOwner().equals(playerUUID)){
+                if (Utilities.inLocation(locOfPlacement.toLocation(), darkMCDoor.loc1.toLocation(), darkMCDoor.loc2.toLocation())){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
 }

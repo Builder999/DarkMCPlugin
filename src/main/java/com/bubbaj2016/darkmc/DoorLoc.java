@@ -63,4 +63,7 @@ public class DoorLoc {
         
         return null;
     }
+    public Location toLocation(){
+        return new Location(world, x, y, z);
+    }
 }
