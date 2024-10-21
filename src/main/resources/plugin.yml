@@ -15,4 +15,7 @@ commands:
     LocWandCommand:
         description: gives Loc Wand
         usage: /<command>
+    RemoveBlocksCommand:
+        description: gives Loc Wand
+        usage: /<command>
     

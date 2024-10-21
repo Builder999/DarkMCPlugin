@@ -55,7 +55,7 @@ public class RightClickHandler implements Listener{
                         if (door.getHalf() == Half.TOP){
                             loc = loc.subtract(0, 1, 0);
                         }
-                        loc = Utilities.stripRotation(loc);
+                        //loc = Utilities.stripRotation(loc);
                         DoorLoc doorLoc = new DoorLoc(event.getPlayer().getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
                         event.setCancelled(true);
                         Directional direction = (Directional) event.getClickedBlock().getBlockData();
@@ -114,7 +114,12 @@ public class RightClickHandler implements Listener{
                     if (meta.getPersistentDataContainer().has(new NamespacedKey(Plugin.getPlugin(), "x2"))){
                         if (event.getClickedBlock().getType() == Material.OAK_DOOR){
                             Bukkit.getServer().broadcastMessage("Assigning Door");
-                            DoorLoc doorLoc = new DoorLoc(event.getClickedBlock().getLocation());
+                            Location tempDoorLoc = event.getClickedBlock().getLocation();
+                            Bisected bisect = (Bisected) event.getClickedBlock().getBlockData();
+                            if (bisect.getHalf() == Half.TOP){
+                                tempDoorLoc = tempDoorLoc.subtract(0, 1, 0);
+                            }
+                            DoorLoc doorLoc = new DoorLoc(tempDoorLoc);
                             if (DoorHandler.doorAdded(doorLoc)) {
                                 PersistentDataContainer con = event.getItem().getItemMeta().getPersistentDataContainer();
                                 DoorLoc loc1 = new DoorLoc(event.getPlayer().getWorld(), con.get(new NamespacedKey(Plugin.getPlugin(), "x1"), PersistentDataType.INTEGER), con.get(new NamespacedKey(Plugin.getPlugin(), "y1"), PersistentDataType.INTEGER), con.get(new NamespacedKey(Plugin.getPlugin(), "z1"), PersistentDataType.INTEGER));

@@ -97,5 +97,12 @@ public class DoorHandler {
         }
         return false;
     }
+    public static void removeOwnerFromDoors(String playerID){
+        for (DarkMCDoor darkMCDoor : doors) {
+            if (darkMCDoor.getOwner().equals(playerID)){
+                darkMCDoor.setOwner("");
+            }
+        }
+    }
 
 }

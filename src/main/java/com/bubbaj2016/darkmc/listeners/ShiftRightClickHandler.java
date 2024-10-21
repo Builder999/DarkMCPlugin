@@ -6,6 +6,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.material.Door;
+
 import com.bubbaj2016.darkmc.DoorHandler;
 import com.bubbaj2016.darkmc.DoorLoc;
 
@@ -20,8 +22,9 @@ public class ShiftRightClickHandler implements Listener{
                         if (DoorHandler.getDoorOwner(loc).equals(event.getPlayer().getUniqueId().toString())){
                             DoorHandler.setOwner(loc, "");
                         }
-                        else {
+                        else if (DoorHandler.getDoorOwner(loc).equals("")){
                             DoorHandler.setOwner(loc, event.getPlayer().getUniqueId().toString());
+
                         }
                         event.setCancelled(true);
                     }
