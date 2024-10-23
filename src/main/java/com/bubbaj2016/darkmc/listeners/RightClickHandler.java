@@ -81,6 +81,8 @@ public class RightClickHandler implements Listener{
                             DoorLoc loc2 = new DoorLoc(event.getPlayer().getWorld(), con.get(new NamespacedKey(Plugin.getPlugin(), "x2"), PersistentDataType.INTEGER), con.get(new NamespacedKey(Plugin.getPlugin(), "y2"), PersistentDataType.INTEGER), con.get(new NamespacedKey(Plugin.getPlugin(), "z2"), PersistentDataType.INTEGER));
                             DoorHandler.setArea(loc1, loc2, doorLoc);
                             Bukkit.getServer().broadcastMessage(DoorHandler.getDoorByLoc(doorLoc).printLocs());
+                            DoorHandler.saveDoorToDatabase(DoorHandler.getDoorByLoc(doorLoc));
+
                         }
                         meta.getPersistentDataContainer().remove(new NamespacedKey(Plugin.getPlugin(), "x1"));
                         meta.getPersistentDataContainer().remove(new NamespacedKey(Plugin.getPlugin(), "x2"));

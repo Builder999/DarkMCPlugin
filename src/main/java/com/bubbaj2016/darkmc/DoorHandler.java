@@ -1,13 +1,39 @@
 package com.bubbaj2016.darkmc;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import java.sql.Connection;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.TextDisplay;
+import java.sql.Statement;
+import java.sql.PreparedStatement;
+import java.sql.DriverManager;
 public class DoorHandler {
     static ArrayList<DarkMCDoor> doors = new ArrayList<>();
+
+    public static void saveDoorToDatabase(DarkMCDoor door){
+        String sql = "CREATE TABLE IF NOT EXISTS doors (currentLoc TEXT NOT NULL PRIMARY KEY, loc1 TEXT, loc2 TEXT, displayLoc TEXT);";
+        try {
+        Connection conn = DriverManager.getConnection(Plugin.url);
+        Statement stm = conn.createStatement();
+        stm.execute(sql);
+        Connection conn2 = DriverManager.getConnection(Plugin.url);
+        sql = "INSERT INTO doors VALUES(?,?,?,?)";
+        PreparedStatement pstm = conn2.prepareStatement(sql);
+        pstm.setString(1, Utilities.locToDBString(door.getDoorLoc()));
+        pstm.setString(2, Utilities.locToDBString(door.loc1));
+        pstm.setString(3, Utilities.locToDBString(door.loc2));
+        pstm.setString(4, Utilities.locToDBString(door.getSignLoc()));
+        pstm.executeUpdate();
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            System.err.println(e.getMessage());
+        }
+    }
+
 
     public static void addDoor(DoorLoc doorLoc,TextDisplay sign){
         DarkMCDoor door = new DarkMCDoor(doorLoc, sign);

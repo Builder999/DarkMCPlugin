@@ -33,6 +33,15 @@ public class Utilities {
         }
         return false;
     }
+
+    public static String locToDBString(DoorLoc loc){
+        return loc.x+":"+loc.y+":"+loc.z;
+    }
+
+    public static Location stringToLoc(World world, String string){
+        String[] coords = string.split(":");
+        return new Location(world, Integer.parseInt(coords[0]), Integer.parseInt(coords[1]), Integer.parseInt(coords[2]));
+    }
 }
 
 

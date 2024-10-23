@@ -1,6 +1,7 @@
 package com.bubbaj2016.darkmc;
 
 import org.bukkit.Bukkit;
+import org.bukkit.block.data.type.Door;
 import org.bukkit.entity.TextDisplay;
 import java.util.UUID;
 
@@ -43,6 +44,10 @@ public class DarkMCDoor {
 
     public TextDisplay getSign(){
         return this.sign;
+    }
+
+    public DoorLoc getSignLoc(){
+        return new DoorLoc(sign.getLocation());
     }
 
     public void setLocs(DoorLoc loc1, DoorLoc loc2){
