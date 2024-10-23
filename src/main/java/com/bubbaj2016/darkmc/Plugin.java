@@ -1,7 +1,9 @@
 package com.bubbaj2016.darkmc;
 
 import org.bukkit.plugin.java.JavaPlugin;
-
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Connection;
 import com.bubbaj2016.darkmc.commands.KeyCommand;
 import com.bubbaj2016.darkmc.commands.LocWandCommand;
 import com.bubbaj2016.darkmc.commands.RemoveBlocksCommand;
@@ -16,7 +18,7 @@ import com.bubbaj2016.darkmc.listeners.ShiftRightClickHandler;
 
 public class Plugin extends JavaPlugin {
     public static JavaPlugin plugin;
-    
+    Connection dbConn;
     @Override
     public void onEnable() {
         getLogger().info("DarkMC Starting");
@@ -31,7 +33,14 @@ public class Plugin extends JavaPlugin {
         getCommand("KeyCommand").setExecutor(new KeyCommand());
         getCommand("LocWandCommand").setExecutor(new LocWandCommand());
         getCommand("RemoveBlocksCommand").setExecutor(new RemoveBlocksCommand());
-
+        String url = "jdbc:sqlite:my.db";
+        try (var conn = DriverManager.getConnection(url)) {
+            if (conn != null) {
+                dbConn = conn;
+            }
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
         plugin = this;
 
     }

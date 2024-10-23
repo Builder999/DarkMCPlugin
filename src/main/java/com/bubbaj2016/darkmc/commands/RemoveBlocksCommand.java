@@ -1,6 +1,5 @@
 package com.bubbaj2016.darkmc.commands;
 
-import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -9,7 +8,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.bubbaj2016.darkmc.BlockHandler;
-import com.bubbaj2016.darkmc.ItemManager;
 
 public class RemoveBlocksCommand implements CommandExecutor{
 

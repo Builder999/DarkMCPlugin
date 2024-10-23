@@ -1,31 +1,21 @@
 package com.bubbaj2016.darkmc.listeners;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.Server.Spigot;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.BlockState;
 import org.bukkit.block.data.Bisected;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.type.Door;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TextDisplay;
 import org.bukkit.entity.Display.Billboard;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -35,7 +25,6 @@ import com.bubbaj2016.darkmc.DoorHandler;
 import com.bubbaj2016.darkmc.DoorLoc;
 import com.bubbaj2016.darkmc.ItemManager;
 import com.bubbaj2016.darkmc.Plugin;
-import com.bubbaj2016.darkmc.Utilities;
 
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -164,6 +153,6 @@ public class RightClickHandler implements Listener{
         display.setText("Owned By: ");
         display.setVisibleByDefault(true);
         display.setBillboard(Billboard.CENTER);
-        DoorHandler.addDoor(doorLoc, display.getUniqueId().toString());
+        DoorHandler.addDoor(doorLoc, display);
     }
 }

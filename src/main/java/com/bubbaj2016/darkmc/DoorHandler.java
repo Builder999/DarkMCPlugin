@@ -1,37 +1,30 @@
 package com.bubbaj2016.darkmc;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.TextDisplay;
-import org.bukkit.util.io.BukkitObjectInputStream;
 public class DoorHandler {
     static ArrayList<DarkMCDoor> doors = new ArrayList<>();
-    public static void addDoor(DoorLoc doorLoc,String UUID){
-        DarkMCDoor door = new DarkMCDoor(doorLoc, UUID);
+
+    public static void addDoor(DoorLoc doorLoc,TextDisplay sign){
+        DarkMCDoor door = new DarkMCDoor(doorLoc, sign);
         doors.add(door);
     }
 
     public static void setOwner(DoorLoc loc, String ownerUUID){
-        DarkMCDoor door = new DarkMCDoor(loc, ownerUUID);
+        DarkMCDoor door = null;
         for (int i = 0; i < doors.size(); i++){
             if (doors.get(i).getDoorLoc().equals(loc)){
                door = doors.get(i); 
             }  
         }
+        if (door == null){
+            return;
+        }
         door.setOwner(ownerUUID);
-        Entity signEnt = Utilities.getEntityByUniqueId(UUID.fromString(door.getSignID()));
-        TextDisplay display = (TextDisplay) signEnt;
-        if (ownerUUID.equals("")){
-            display.setText("Owned by: ");
-        }
-        else {
-            display.setText("Owned by: " + Bukkit.getPlayer(UUID.fromString(ownerUUID)).getName());
-        }
     }
 
     public static String getDoorOwner(DoorLoc loc){

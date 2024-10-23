@@ -1,16 +1,19 @@
 package com.bubbaj2016.darkmc;
 
-import org.bukkit.Location;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.TextDisplay;
+import java.util.UUID;
+
 public class DarkMCDoor {
     private DoorLoc doorLoc;
-    private String signID;
+    private TextDisplay sign;
     private String owner = "";
     private boolean locked = false;
     DoorLoc loc1;
     DoorLoc loc2;
-    public DarkMCDoor(DoorLoc loc, String signID){
+    public DarkMCDoor(DoorLoc loc, TextDisplay sign){
         doorLoc = loc;
-        this.signID = signID;
+        this.sign = sign;
     }
 
     public DoorLoc getDoorLoc() {
@@ -30,10 +33,16 @@ public class DarkMCDoor {
     
     public void setOwner (String id){
         owner = id;
+        if (id.equals("")){
+            sign.setText("Owned by: ");
+        }
+        else {
+            sign.setText("Owned by: " + Bukkit.getPlayer(UUID.fromString(id)).getName());
+        }
     }
 
-    public String getSignID(){
-        return this.signID;
+    public TextDisplay getSign(){
+        return this.sign;
     }
 
     public void setLocs(DoorLoc loc1, DoorLoc loc2){

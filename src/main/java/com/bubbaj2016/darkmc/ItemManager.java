@@ -1,6 +1,5 @@
 package com.bubbaj2016.darkmc;
 
-import java.util.ArrayList;
 
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
