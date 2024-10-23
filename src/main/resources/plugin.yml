@@ -6,9 +6,6 @@ commands:
     helloWorld:
         description: Hello, World!
         usage: /<command>
-    WandCommand:
-        description: gives special wand
-        usage: /<command>
     KeyCommand:
         description: gives key
         usage: /<command>

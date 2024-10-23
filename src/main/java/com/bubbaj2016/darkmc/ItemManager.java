@@ -8,22 +8,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class ItemManager {
-    public static ItemStack wand;
     public static ItemStack key;
     public static ItemStack locWand;
     public static void init(){
-        createWand();
         createKey();
         createLocWand();
-    }
-
-    static void createWand(){
-        ItemStack item2 = new ItemStack(Material.STICK, 1);
-        ItemMeta meta = item2.getItemMeta();
-        meta.setDisplayName("Door Set Wand");
-        meta.addEnchant(Enchantment.PROTECTION_PROJECTILE, 1, false);
-        item2.setItemMeta(meta);
-        wand = item2;
     }
 
     static void createLocWand(){

@@ -47,42 +47,7 @@ public class RightClickHandler implements Listener{
     public void onRightClick(PlayerInteractEvent event){
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK){
             if (event.getItem() != null){
-                if (event.getItem().getItemMeta().equals(ItemManager.wand.getItemMeta())){
-                    if (event.getClickedBlock().getType() == Material.OAK_DOOR){
-                        Player player = event.getPlayer();
-                        Door door = (Door) event.getClickedBlock().getBlockData();
-                        Location loc = event.getClickedBlock().getLocation();
-                        if (door.getHalf() == Half.TOP){
-                            loc = loc.subtract(0, 1, 0);
-                        }
-                        //loc = Utilities.stripRotation(loc);
-                        DoorLoc doorLoc = new DoorLoc(event.getPlayer().getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
-                        event.setCancelled(true);
-                        Directional direction = (Directional) event.getClickedBlock().getBlockData();
-
-                        if (direction.getFacing() == BlockFace.NORTH){
-                            loc = loc.add(0, 1, 1.25);
-                        }
-                        else if (direction.getFacing() == BlockFace.EAST){
-                            loc = loc.add(-.5, 1, 0);
-                        }
-                        else if (direction.getFacing() == BlockFace.SOUTH){
-                            loc = loc.add(0, 1, -.25);
-
-                        }     
-                        else if (direction.getFacing() == BlockFace.WEST){
-                            Bukkit.getServer().getLogger().info(direction.getFacing().toString());
-                            loc = loc.add(1.5, 1, 0);
-                        }
-                        TextDisplay display = event.getPlayer().getWorld().spawn(loc, TextDisplay.class);
-                        display.setText("Owned By: ");
-                        display.setVisibleByDefault(true);
-                        display.setBillboard(Billboard.CENTER);
-                        DoorHandler.addDoor(doorLoc, display.getUniqueId().toString());
-                    }
-                }
-
-                else if (event.getItem().getItemMeta().equals(ItemManager.key.getItemMeta())){
+                 if (event.getItem().getItemMeta().equals(ItemManager.key.getItemMeta())){
                     if (event.getClickedBlock().getType() == Material.OAK_DOOR){
                         Location loc = event.getClickedBlock().getLocation();
                         Bisected bisect = (Bisected) event.getClickedBlock().getBlockData();
@@ -113,20 +78,20 @@ public class RightClickHandler implements Listener{
 
                     if (meta.getPersistentDataContainer().has(new NamespacedKey(Plugin.getPlugin(), "x2"))){
                         if (event.getClickedBlock().getType() == Material.OAK_DOOR){
+                            event.setCancelled(true);
                             Bukkit.getServer().broadcastMessage("Assigning Door");
                             Location tempDoorLoc = event.getClickedBlock().getLocation();
                             Bisected bisect = (Bisected) event.getClickedBlock().getBlockData();
                             if (bisect.getHalf() == Half.TOP){
                                 tempDoorLoc = tempDoorLoc.subtract(0, 1, 0);
                             }
+                            addDoor(event.getPlayer(), event.getClickedBlock());
                             DoorLoc doorLoc = new DoorLoc(tempDoorLoc);
-                            if (DoorHandler.doorAdded(doorLoc)) {
-                                PersistentDataContainer con = event.getItem().getItemMeta().getPersistentDataContainer();
-                                DoorLoc loc1 = new DoorLoc(event.getPlayer().getWorld(), con.get(new NamespacedKey(Plugin.getPlugin(), "x1"), PersistentDataType.INTEGER), con.get(new NamespacedKey(Plugin.getPlugin(), "y1"), PersistentDataType.INTEGER), con.get(new NamespacedKey(Plugin.getPlugin(), "z1"), PersistentDataType.INTEGER));
-                                DoorLoc loc2 = new DoorLoc(event.getPlayer().getWorld(), con.get(new NamespacedKey(Plugin.getPlugin(), "x2"), PersistentDataType.INTEGER), con.get(new NamespacedKey(Plugin.getPlugin(), "y2"), PersistentDataType.INTEGER), con.get(new NamespacedKey(Plugin.getPlugin(), "z2"), PersistentDataType.INTEGER));
-                                DoorHandler.setArea(loc1, loc2, doorLoc);
-                                Bukkit.getServer().broadcastMessage(DoorHandler.getDoorByLoc(doorLoc).printLocs());
-                            }
+                            PersistentDataContainer con = event.getItem().getItemMeta().getPersistentDataContainer();
+                            DoorLoc loc1 = new DoorLoc(event.getPlayer().getWorld(), con.get(new NamespacedKey(Plugin.getPlugin(), "x1"), PersistentDataType.INTEGER), con.get(new NamespacedKey(Plugin.getPlugin(), "y1"), PersistentDataType.INTEGER), con.get(new NamespacedKey(Plugin.getPlugin(), "z1"), PersistentDataType.INTEGER));
+                            DoorLoc loc2 = new DoorLoc(event.getPlayer().getWorld(), con.get(new NamespacedKey(Plugin.getPlugin(), "x2"), PersistentDataType.INTEGER), con.get(new NamespacedKey(Plugin.getPlugin(), "y2"), PersistentDataType.INTEGER), con.get(new NamespacedKey(Plugin.getPlugin(), "z2"), PersistentDataType.INTEGER));
+                            DoorHandler.setArea(loc1, loc2, doorLoc);
+                            Bukkit.getServer().broadcastMessage(DoorHandler.getDoorByLoc(doorLoc).printLocs());
                         }
                         meta.getPersistentDataContainer().remove(new NamespacedKey(Plugin.getPlugin(), "x1"));
                         meta.getPersistentDataContainer().remove(new NamespacedKey(Plugin.getPlugin(), "x2"));
@@ -169,5 +134,36 @@ public class RightClickHandler implements Listener{
         }
         
         
+    }
+
+    private void addDoor(Player player, Block clickedBlock){
+        Door door = (Door) clickedBlock.getBlockData();
+        Location loc = clickedBlock.getLocation();
+        if (door.getHalf() == Half.TOP){
+            loc = loc.subtract(0, 1, 0);
+        }
+        //loc = Utilities.stripRotation(loc);
+        DoorLoc doorLoc = new DoorLoc(player.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
+        Directional direction = (Directional) clickedBlock.getBlockData();
+
+        if (direction.getFacing() == BlockFace.NORTH){
+            loc = loc.add(0, 1, 1.25);
+        }
+        else if (direction.getFacing() == BlockFace.EAST){
+            loc = loc.add(-.5, 1, 0);
+        }
+        else if (direction.getFacing() == BlockFace.SOUTH){
+            loc = loc.add(0, 1, -.25);
+
+        }     
+        else if (direction.getFacing() == BlockFace.WEST){
+            Bukkit.getServer().getLogger().info(direction.getFacing().toString());
+            loc = loc.add(1.5, 1, 0);
+        }
+        TextDisplay display = player.getWorld().spawn(loc, TextDisplay.class);
+        display.setText("Owned By: ");
+        display.setVisibleByDefault(true);
+        display.setBillboard(Billboard.CENTER);
+        DoorHandler.addDoor(doorLoc, display.getUniqueId().toString());
     }
 }

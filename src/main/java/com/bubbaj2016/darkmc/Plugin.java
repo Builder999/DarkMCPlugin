@@ -5,7 +5,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.bubbaj2016.darkmc.commands.KeyCommand;
 import com.bubbaj2016.darkmc.commands.LocWandCommand;
 import com.bubbaj2016.darkmc.commands.RemoveBlocksCommand;
-import com.bubbaj2016.darkmc.commands.WandCommand;
 import com.bubbaj2016.darkmc.listeners.BlockBreakHandler;
 import com.bubbaj2016.darkmc.listeners.BlockPlaceHandler;
 import com.bubbaj2016.darkmc.listeners.PlayerLeaveListener;
@@ -30,7 +29,6 @@ public class Plugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new BlockBreakHandler(), this);
 
         getCommand("KeyCommand").setExecutor(new KeyCommand());
-        getCommand("WandCommand").setExecutor(new WandCommand());
         getCommand("LocWandCommand").setExecutor(new LocWandCommand());
         getCommand("RemoveBlocksCommand").setExecutor(new RemoveBlocksCommand());
 
