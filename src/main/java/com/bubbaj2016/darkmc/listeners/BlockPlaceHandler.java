@@ -7,7 +7,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 
 import com.bubbaj2016.darkmc.BlockHandler;
 import com.bubbaj2016.darkmc.DoorHandler;
-import com.bubbaj2016.darkmc.DoorLoc;
+import com.bubbaj2016.darkmc.flooredLoc;
 
 
 public class BlockPlaceHandler implements Listener{
@@ -16,7 +16,7 @@ public class BlockPlaceHandler implements Listener{
         if (event.getPlayer().getGameMode() == GameMode.CREATIVE){
             return;
         }
-        if(!DoorHandler.allowedToPlace(new DoorLoc(event.getBlockPlaced().getLocation()), event.getPlayer().getUniqueId().toString())){
+        if(!DoorHandler.allowedToPlace(new flooredLoc(event.getBlockPlaced().getLocation()), event.getPlayer().getUniqueId().toString())){
 
             event.setCancelled(true);
             return;

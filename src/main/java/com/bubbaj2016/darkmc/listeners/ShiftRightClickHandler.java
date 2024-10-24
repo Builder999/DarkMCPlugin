@@ -8,7 +8,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import com.bubbaj2016.darkmc.DoorHandler;
-import com.bubbaj2016.darkmc.DoorLoc;
+import com.bubbaj2016.darkmc.flooredLoc;
 
 public class ShiftRightClickHandler implements Listener{
     @EventHandler
@@ -16,7 +16,7 @@ public class ShiftRightClickHandler implements Listener{
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getPlayer().isSneaking()){
             if (event.getItem() == null){
                 if (event.getClickedBlock().getType() == Material.OAK_DOOR){
-                    DoorLoc loc = new DoorLoc(event.getClickedBlock().getLocation());
+                    flooredLoc loc = new flooredLoc(event.getClickedBlock().getLocation());
                     if (DoorHandler.doorAdded(loc)){
                         if (DoorHandler.getDoorOwner(loc).equals(event.getPlayer().getUniqueId().toString())){
                             DoorHandler.setOwner(loc, "");

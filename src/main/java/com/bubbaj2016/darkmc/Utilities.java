@@ -34,7 +34,7 @@ public class Utilities {
         return false;
     }
 
-    public static String locToDBString(DoorLoc loc){
+    public static String locToDBString(flooredLoc loc){
         return loc.x+":"+loc.y+":"+loc.z;
     }
     public static String locToDBString(Location loc){

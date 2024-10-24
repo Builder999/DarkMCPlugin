@@ -22,7 +22,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import com.bubbaj2016.darkmc.DoorHandler;
-import com.bubbaj2016.darkmc.DoorLoc;
+import com.bubbaj2016.darkmc.flooredLoc;
 import com.bubbaj2016.darkmc.ItemManager;
 import com.bubbaj2016.darkmc.Plugin;
 
@@ -43,7 +43,7 @@ public class RightClickHandler implements Listener{
                         if (bisect.getHalf() == Half.TOP){
                             loc = loc.subtract(0, 1, 0);
                         }
-                        DoorLoc doorLoc = new DoorLoc(loc);
+                        flooredLoc doorLoc = new flooredLoc(loc);
                         if (DoorHandler.doorAdded(doorLoc)){
                             // if(DoorHandler.getDoorOwner(doorLoc).equals("")){
                             //     DoorHandler.setOwner(doorLoc, event.getPlayer().getUniqueId().toString());
@@ -75,10 +75,10 @@ public class RightClickHandler implements Listener{
                                 tempDoorLoc = tempDoorLoc.subtract(0, 1, 0);
                             }
                             addDoor(event.getPlayer(), event.getClickedBlock());
-                            DoorLoc doorLoc = new DoorLoc(tempDoorLoc);
+                            flooredLoc doorLoc = new flooredLoc(tempDoorLoc);
                             PersistentDataContainer con = event.getItem().getItemMeta().getPersistentDataContainer();
-                            DoorLoc loc1 = new DoorLoc(event.getPlayer().getWorld(), con.get(new NamespacedKey(Plugin.getPlugin(), "x1"), PersistentDataType.INTEGER), con.get(new NamespacedKey(Plugin.getPlugin(), "y1"), PersistentDataType.INTEGER), con.get(new NamespacedKey(Plugin.getPlugin(), "z1"), PersistentDataType.INTEGER));
-                            DoorLoc loc2 = new DoorLoc(event.getPlayer().getWorld(), con.get(new NamespacedKey(Plugin.getPlugin(), "x2"), PersistentDataType.INTEGER), con.get(new NamespacedKey(Plugin.getPlugin(), "y2"), PersistentDataType.INTEGER), con.get(new NamespacedKey(Plugin.getPlugin(), "z2"), PersistentDataType.INTEGER));
+                            flooredLoc loc1 = new flooredLoc(event.getPlayer().getWorld(), con.get(new NamespacedKey(Plugin.getPlugin(), "x1"), PersistentDataType.INTEGER), con.get(new NamespacedKey(Plugin.getPlugin(), "y1"), PersistentDataType.INTEGER), con.get(new NamespacedKey(Plugin.getPlugin(), "z1"), PersistentDataType.INTEGER));
+                            flooredLoc loc2 = new flooredLoc(event.getPlayer().getWorld(), con.get(new NamespacedKey(Plugin.getPlugin(), "x2"), PersistentDataType.INTEGER), con.get(new NamespacedKey(Plugin.getPlugin(), "y2"), PersistentDataType.INTEGER), con.get(new NamespacedKey(Plugin.getPlugin(), "z2"), PersistentDataType.INTEGER));
                             DoorHandler.setArea(loc1, loc2, doorLoc);
                             Bukkit.getServer().broadcastMessage(DoorHandler.getDoorByLoc(doorLoc).printLocs());
                             DoorHandler.saveDoorToDatabase(DoorHandler.getDoorByLoc(doorLoc));
@@ -114,7 +114,7 @@ public class RightClickHandler implements Listener{
                     if (bisect.getHalf() == Half.TOP){
                         loc = loc.subtract(0, 1, 0);
                     }
-                    DoorLoc doorLocation = new DoorLoc(loc);
+                    flooredLoc doorLocation = new flooredLoc(loc);
                     if(DoorHandler.doorAdded(doorLocation)){
                         if (DoorHandler.getLocked(doorLocation)){
                             event.setCancelled(true);
@@ -134,7 +134,7 @@ public class RightClickHandler implements Listener{
             loc = loc.subtract(0, 1, 0);
         }
         //loc = Utilities.stripRotation(loc);
-        DoorLoc doorLoc = new DoorLoc(player.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
+        flooredLoc doorLoc = new flooredLoc(player.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
         Directional direction = (Directional) clickedBlock.getBlockData();
 
         if (direction.getFacing() == BlockFace.NORTH){

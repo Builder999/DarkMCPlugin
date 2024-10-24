@@ -63,7 +63,7 @@ public class DoorHandler {
                 display.setText("Owned By: ");
                 display.setVisibleByDefault(true);
                 display.setBillboard(Billboard.CENTER);
-                addDoor(new DarkMCDoor(new DoorLoc(locOfDoor), display, new DoorLoc(loc1), new DoorLoc(loc2)));
+                addDoor(new DarkMCDoor(new flooredLoc(locOfDoor), display, new flooredLoc(loc1), new flooredLoc(loc2)));
             }
         } catch (SQLException e) {
             // TODO Auto-generated catch block
@@ -73,7 +73,7 @@ public class DoorHandler {
     }
 
 
-    public static void addDoor(DoorLoc doorLoc,TextDisplay sign){
+    public static void addDoor(flooredLoc doorLoc,TextDisplay sign){
         DarkMCDoor door = new DarkMCDoor(doorLoc, sign);
         doors.add(door);
     }
@@ -82,7 +82,7 @@ public class DoorHandler {
         doors.add(door);
     }
 
-    public static void setOwner(DoorLoc loc, String ownerUUID){
+    public static void setOwner(flooredLoc loc, String ownerUUID){
         DarkMCDoor door = null;
         for (int i = 0; i < doors.size(); i++){
             if (doors.get(i).getDoorLoc().equals(loc)){
@@ -95,7 +95,7 @@ public class DoorHandler {
         door.setOwner(ownerUUID);
     }
 
-    public static String getDoorOwner(DoorLoc loc){
+    public static String getDoorOwner(flooredLoc loc){
         for (int i = 0; i < doors.size(); i++){
             if (doors.get(i).getDoorLoc().equals(loc)){
                 return doors.get(i).getOwner();
@@ -104,7 +104,7 @@ public class DoorHandler {
         return "";
     }
 
-    public static boolean doorAdded(DoorLoc loc){
+    public static boolean doorAdded(flooredLoc loc){
         for (DarkMCDoor darkMCDoor : doors) {
             if (darkMCDoor.getDoorLoc().equals(loc)){
                 return true;
@@ -113,7 +113,7 @@ public class DoorHandler {
         return false;
     }
 
-    public static void toggleLock(DoorLoc loc){
+    public static void toggleLock(flooredLoc loc){
         for (DarkMCDoor darkMCDoor : doors) {
             if (darkMCDoor.getDoorLoc().equals(loc)){
                 darkMCDoor.setLocked(!darkMCDoor.locked());
@@ -121,7 +121,7 @@ public class DoorHandler {
         }
     }
 
-    public static boolean getLocked(DoorLoc loc){
+    public static boolean getLocked(flooredLoc loc){
         for (DarkMCDoor darkMCDoor : doors) {
             if (darkMCDoor.getDoorLoc().equals(loc)){
                 return darkMCDoor.locked();
@@ -130,7 +130,7 @@ public class DoorHandler {
         return false;
     }
 
-    public static void setArea(DoorLoc loc1, DoorLoc loc2, DoorLoc loc){
+    public static void setArea(flooredLoc loc1, flooredLoc loc2, flooredLoc loc){
         for (DarkMCDoor darkMCDoor : doors) {
             if (darkMCDoor.getDoorLoc().equals(loc)){
                 darkMCDoor.setLocs(loc1, loc2);
@@ -138,7 +138,7 @@ public class DoorHandler {
         }
     }
 
-    public static DarkMCDoor getDoorByLoc(DoorLoc loc){
+    public static DarkMCDoor getDoorByLoc(flooredLoc loc){
         for (DarkMCDoor darkMCDoor : doors) {
             if (darkMCDoor.getDoorLoc().equals(loc)){
                 return darkMCDoor;
@@ -148,7 +148,7 @@ public class DoorHandler {
     }
 
 
-    public static boolean allowedToPlace(DoorLoc locOfPlacement, String playerUUID){
+    public static boolean allowedToPlace(flooredLoc locOfPlacement, String playerUUID){
         for (DarkMCDoor darkMCDoor : doors) {
             if (darkMCDoor.getOwner().equals(playerUUID)){
                 if (Utilities.inLocation(locOfPlacement.toLocation(), darkMCDoor.loc1.toLocation(), darkMCDoor.loc2.toLocation())){

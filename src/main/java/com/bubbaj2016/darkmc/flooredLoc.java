@@ -4,20 +4,20 @@ package com.bubbaj2016.darkmc;
 import org.bukkit.Location;
 import org.bukkit.World;
 
-public class DoorLoc {
+public class flooredLoc {
     World world;
     int x;
     int y;
     int z;
 
-    public DoorLoc(World world, int x, int y, int z){
+    public flooredLoc(World world, int x, int y, int z){
         this.world = world;
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
-    public DoorLoc(Location loc){
+    public flooredLoc(Location loc){
         this.world = loc.getWorld();
         this.x = loc.getBlockX();
         this.y = loc.getBlockY();
@@ -27,7 +27,7 @@ public class DoorLoc {
     @Override
     public boolean equals(Object obj) {
         if (obj != null){
-           DoorLoc loc = (DoorLoc) obj;
+           flooredLoc loc = (flooredLoc) obj;
            
            if (this.world.equals(loc.world)){
                 if (this.x == loc.x){
@@ -58,7 +58,7 @@ public class DoorLoc {
         return "X: " + x + " Y: " + y + " Z: " + z + "World: " + world;
     }
 
-    public static DoorLoc fromString(String string){
+    public static flooredLoc fromString(String string){
         
         return null;
     }

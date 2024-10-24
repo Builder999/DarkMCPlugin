@@ -7,23 +7,23 @@ import org.bukkit.entity.TextDisplay;
 import java.util.UUID;
 
 public class DarkMCDoor {
-    private DoorLoc doorLoc;
+    private flooredLoc doorLoc;
     private TextDisplay sign;
     private String owner = "";
     private boolean locked = false;
-    DoorLoc loc1;
-    DoorLoc loc2;
-    public DarkMCDoor(DoorLoc loc, TextDisplay sign){
+    flooredLoc loc1;
+    flooredLoc loc2;
+    public DarkMCDoor(flooredLoc loc, TextDisplay sign){
         doorLoc = loc;
         this.sign = sign;
     }
 
-    public DarkMCDoor(DoorLoc loc, TextDisplay sign, DoorLoc loc1, DoorLoc loc2){
+    public DarkMCDoor(flooredLoc loc, TextDisplay sign, flooredLoc loc1, flooredLoc loc2){
         doorLoc = loc;
         this.sign = sign;
     }
 
-    public DoorLoc getDoorLoc() {
+    public flooredLoc getDoorLoc() {
         return doorLoc;
     }
 
@@ -56,7 +56,7 @@ public class DarkMCDoor {
         return sign.getLocation();
     }
 
-    public void setLocs(DoorLoc loc1, DoorLoc loc2){
+    public void setLocs(flooredLoc loc1, flooredLoc loc2){
         this.loc1 = loc1;
         this.loc2 = loc2;
     }
