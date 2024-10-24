@@ -37,10 +37,13 @@ public class Utilities {
     public static String locToDBString(DoorLoc loc){
         return loc.x+":"+loc.y+":"+loc.z;
     }
+    public static String locToDBString(Location loc){
+        return loc.getX()+":"+loc.getY()+":"+loc.getZ();
+    }
 
     public static Location stringToLoc(World world, String string){
         String[] coords = string.split(":");
-        return new Location(world, Integer.parseInt(coords[0]), Integer.parseInt(coords[1]), Integer.parseInt(coords[2]));
+        return new Location(world, Double.parseDouble(coords[0]), Double.parseDouble(coords[1]), Double.parseDouble(coords[2]));
     }
 }
 

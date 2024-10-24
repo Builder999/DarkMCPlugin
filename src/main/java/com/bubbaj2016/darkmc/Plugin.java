@@ -42,11 +42,14 @@ public class Plugin extends JavaPlugin {
             System.err.println(e.getMessage());
         }
         plugin = this;
+        DoorHandler.loadDoorsFromDatabase();
 
     }
     @Override
     public void onDisable() {
         getLogger().info("Plugin is Disabling!");
+        DoorHandler.removeTextEntities();
+
     }
     public static JavaPlugin getPlugin() {
         return plugin;

@@ -5,28 +5,37 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.command.CommandSender;
+
 import java.sql.Connection;
+
+import org.bukkit.entity.Display.Billboard;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.TextDisplay;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.DriverManager;
 public class DoorHandler {
     static ArrayList<DarkMCDoor> doors = new ArrayList<>();
 
     public static void saveDoorToDatabase(DarkMCDoor door){
-        String sql = "CREATE TABLE IF NOT EXISTS doors (currentLoc TEXT NOT NULL PRIMARY KEY, loc1 TEXT, loc2 TEXT, displayLoc TEXT);";
+        String sql = "CREATE TABLE IF NOT EXISTS doors (currentLoc TEXT NOT NULL PRIMARY KEY, loc1 TEXT, loc2 TEXT, displayLoc TEXT, worldName TEXT);";
         try {
         Connection conn = DriverManager.getConnection(Plugin.url);
         Statement stm = conn.createStatement();
         stm.execute(sql);
         Connection conn2 = DriverManager.getConnection(Plugin.url);
-        sql = "INSERT INTO doors VALUES(?,?,?,?)";
+        sql = "INSERT INTO doors VALUES(?,?,?,?,?)";
         PreparedStatement pstm = conn2.prepareStatement(sql);
         pstm.setString(1, Utilities.locToDBString(door.getDoorLoc()));
         pstm.setString(2, Utilities.locToDBString(door.loc1));
         pstm.setString(3, Utilities.locToDBString(door.loc2));
         pstm.setString(4, Utilities.locToDBString(door.getSignLoc()));
+        pstm.setString(5, door.getDoorLoc().world.getName());
+
         pstm.executeUpdate();
         } catch (SQLException e) {
             // TODO Auto-generated catch block
@@ -34,9 +43,42 @@ public class DoorHandler {
         }
     }
 
+    public static void loadDoorsFromDatabase(){
+        String tableCreate = "CREATE TABLE IF NOT EXISTS doors (currentLoc TEXT NOT NULL PRIMARY KEY, loc1 TEXT, loc2 TEXT, displayLoc TEXT, worldName TEXT);";
+        try {
+            Connection connCreate = DriverManager.getConnection(Plugin.url);
+            Connection conn = DriverManager.getConnection(Plugin.url);
+
+            Statement stm = connCreate.createStatement();
+            stm.execute(tableCreate);
+            String sql = "SELECT * FROM doors;";
+            PreparedStatement pstm = conn.prepareStatement(sql);
+            ResultSet results = pstm.executeQuery();
+            while (results.next()){
+                World world = Bukkit.getServer().getWorld(results.getString(5));
+                Location locOfDoor = Utilities.stringToLoc(world, results.getString(1));
+                Location loc1 = Utilities.stringToLoc(world, results.getString(2));
+                Location loc2 = Utilities.stringToLoc(world, results.getString(3));
+                TextDisplay display = world.spawn(Utilities.stringToLoc(world, results.getString(4)), TextDisplay.class);
+                display.setText("Owned By: ");
+                display.setVisibleByDefault(true);
+                display.setBillboard(Billboard.CENTER);
+                addDoor(new DarkMCDoor(new DoorLoc(locOfDoor), display, new DoorLoc(loc1), new DoorLoc(loc2)));
+            }
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            System.err.println(e.getMessage());
+        }
+
+    }
+
 
     public static void addDoor(DoorLoc doorLoc,TextDisplay sign){
         DarkMCDoor door = new DarkMCDoor(doorLoc, sign);
+        doors.add(door);
+    }
+
+    public static void addDoor(DarkMCDoor door){
         doors.add(door);
     }
 
@@ -121,6 +163,16 @@ public class DoorHandler {
             if (darkMCDoor.getOwner().equals(playerID)){
                 darkMCDoor.setOwner("");
             }
+        }
+    }
+
+    public static void removeDoorTextEntityFromWorld(DarkMCDoor door){
+        door.getSign().remove();
+    }
+
+    public static void removeTextEntities(){
+        for (DarkMCDoor darkMCDoor : doors) {
+            removeDoorTextEntityFromWorld(darkMCDoor);
         }
     }
 
