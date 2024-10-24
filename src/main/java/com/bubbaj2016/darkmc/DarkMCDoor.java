@@ -62,7 +62,7 @@ public class DarkMCDoor {
     }
 
     public String printLocs(){
-        return "X: " + loc1.x + " Y: " + loc1.y + "\n" + "X: " + loc2.x + " Y: " + loc2.y;
+        return "X: " + loc1.getBlockX() + " Y: " + loc1.getBlockY() + "\n" + "X: " + loc2.getBlockX() + " Y: " + loc2.getBlockY();
     }
 
 }

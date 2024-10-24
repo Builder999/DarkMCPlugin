@@ -34,7 +34,7 @@ public class DoorHandler {
         pstm.setString(2, Utilities.locToDBString(door.loc1));
         pstm.setString(3, Utilities.locToDBString(door.loc2));
         pstm.setString(4, Utilities.locToDBString(door.getSignLoc()));
-        pstm.setString(5, door.getDoorLoc().world.getName());
+        pstm.setString(5, door.getDoorLoc().getWorld().getName());
 
         pstm.executeUpdate();
         } catch (SQLException e) {
@@ -151,7 +151,7 @@ public class DoorHandler {
     public static boolean allowedToPlace(flooredLoc locOfPlacement, String playerUUID){
         for (DarkMCDoor darkMCDoor : doors) {
             if (darkMCDoor.getOwner().equals(playerUUID)){
-                if (Utilities.inLocation(locOfPlacement.toLocation(), darkMCDoor.loc1.toLocation(), darkMCDoor.loc2.toLocation())){
+                if (Utilities.inLocation(locOfPlacement, darkMCDoor.loc1, darkMCDoor.loc2)){
                     return true;
                 }
             }

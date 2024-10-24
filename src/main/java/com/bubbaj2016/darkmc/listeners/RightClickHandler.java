@@ -79,6 +79,7 @@ public class RightClickHandler implements Listener{
                             PersistentDataContainer con = event.getItem().getItemMeta().getPersistentDataContainer();
                             flooredLoc loc1 = new flooredLoc(event.getPlayer().getWorld(), con.get(new NamespacedKey(Plugin.getPlugin(), "x1"), PersistentDataType.INTEGER), con.get(new NamespacedKey(Plugin.getPlugin(), "y1"), PersistentDataType.INTEGER), con.get(new NamespacedKey(Plugin.getPlugin(), "z1"), PersistentDataType.INTEGER));
                             flooredLoc loc2 = new flooredLoc(event.getPlayer().getWorld(), con.get(new NamespacedKey(Plugin.getPlugin(), "x2"), PersistentDataType.INTEGER), con.get(new NamespacedKey(Plugin.getPlugin(), "y2"), PersistentDataType.INTEGER), con.get(new NamespacedKey(Plugin.getPlugin(), "z2"), PersistentDataType.INTEGER));
+
                             DoorHandler.setArea(loc1, loc2, doorLoc);
                             Bukkit.getServer().broadcastMessage(DoorHandler.getDoorByLoc(doorLoc).printLocs());
                             DoorHandler.saveDoorToDatabase(DoorHandler.getDoorByLoc(doorLoc));
@@ -93,6 +94,11 @@ public class RightClickHandler implements Listener{
                             meta.getPersistentDataContainer().set(new NamespacedKey(Plugin.getPlugin(), "y1"), PersistentDataType.INTEGER, event.getClickedBlock().getLocation().getBlockY());
                             meta.getPersistentDataContainer().set(new NamespacedKey(Plugin.getPlugin(), "z1"), PersistentDataType.INTEGER, event.getClickedBlock().getLocation().getBlockZ());
                             Bukkit.getServer().broadcastMessage("Assigning Loc 1");
+                            event.getItem().setItemMeta(meta);
+                            PersistentDataContainer con = event.getItem().getItemMeta().getPersistentDataContainer();
+
+                            flooredLoc floorLoc = new flooredLoc(event.getPlayer().getWorld(), con.get(new NamespacedKey(Plugin.getPlugin(), "x1"), PersistentDataType.INTEGER), con.get(new NamespacedKey(Plugin.getPlugin(), "y1"), PersistentDataType.INTEGER), con.get(new NamespacedKey(Plugin.getPlugin(), "z1"), PersistentDataType.INTEGER));
+                            Bukkit.getServer().broadcastMessage(floorLoc.toString());
 
                         }
                         else if (!meta.getPersistentDataContainer().has(new NamespacedKey(Plugin.getPlugin(), "x2"))){
@@ -100,6 +106,11 @@ public class RightClickHandler implements Listener{
                             meta.getPersistentDataContainer().set(new NamespacedKey(Plugin.getPlugin(), "y2"), PersistentDataType.INTEGER, event.getClickedBlock().getLocation().getBlockY());
                             meta.getPersistentDataContainer().set(new NamespacedKey(Plugin.getPlugin(), "z2"), PersistentDataType.INTEGER, event.getClickedBlock().getLocation().getBlockZ());
                             Bukkit.getServer().broadcastMessage("Assigning Loc 2");
+                            event.getItem().setItemMeta(meta);
+                            PersistentDataContainer con = event.getItem().getItemMeta().getPersistentDataContainer();
+
+                            flooredLoc floorLoc = new flooredLoc(event.getPlayer().getWorld(), con.get(new NamespacedKey(Plugin.getPlugin(), "x2"), PersistentDataType.INTEGER), con.get(new NamespacedKey(Plugin.getPlugin(), "y2"), PersistentDataType.INTEGER), con.get(new NamespacedKey(Plugin.getPlugin(), "z2"), PersistentDataType.INTEGER));
+                            Bukkit.getServer().broadcastMessage(floorLoc.toString());
                         }
                     }
                     event.getItem().setItemMeta(meta);

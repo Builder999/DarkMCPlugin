@@ -19,10 +19,6 @@ public class Utilities {
     return null;
 }
 
-    public static Location stripRotation(Location loc){
-        return new Location(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ());
-    }
-
     public static boolean inLocation(Location currentLoc, Location loc1, Location loc2){
         if (Math.min(loc1.getBlockX(), loc2.getBlockX()) <= currentLoc.getBlockX() && currentLoc.getBlockX() <= Math.max(loc1.getBlockX(), loc2.getBlockX())){
             if (Math.min(loc1.getBlockY(), loc2.getBlockY()) <= currentLoc.getBlockY() && currentLoc.getBlockY() <= Math.max(loc1.getBlockY(), loc2.getBlockY())){
@@ -35,7 +31,7 @@ public class Utilities {
     }
 
     public static String locToDBString(flooredLoc loc){
-        return loc.x+":"+loc.y+":"+loc.z;
+        return loc.getBlockX()+":"+loc.getBlockY()+":"+loc.getBlockZ();
     }
     public static String locToDBString(Location loc){
         return loc.getX()+":"+loc.getY()+":"+loc.getZ();
