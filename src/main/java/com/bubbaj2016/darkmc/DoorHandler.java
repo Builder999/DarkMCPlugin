@@ -22,13 +22,9 @@ public class DoorHandler {
     static ArrayList<DarkMCDoor> doors = new ArrayList<>();
 
     public static void saveDoorToDatabase(DarkMCDoor door){
-        String sql = "CREATE TABLE IF NOT EXISTS doors (currentLoc TEXT NOT NULL PRIMARY KEY, loc1 TEXT, loc2 TEXT, displayLoc TEXT, worldName TEXT);";
         try {
-        Connection conn = DriverManager.getConnection(Plugin.url);
-        Statement stm = conn.createStatement();
-        stm.execute(sql);
         Connection conn2 = DriverManager.getConnection(Plugin.url);
-        sql = "INSERT INTO doors VALUES(?,?,?,?,?)";
+        String sql = "INSERT INTO doors VALUES(?,?,?,?,?)";
         PreparedStatement pstm = conn2.prepareStatement(sql);
         pstm.setString(1, Utilities.locToDBString(door.getDoorLoc()));
         pstm.setString(2, Utilities.locToDBString(door.loc1));
@@ -37,20 +33,15 @@ public class DoorHandler {
         pstm.setString(5, door.getDoorLoc().getWorld().getName());
 
         pstm.executeUpdate();
+        conn2.close();
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
             System.err.println(e.getMessage());
         }
     }
 
     public static void loadDoorsFromDatabase(){
-        String tableCreate = "CREATE TABLE IF NOT EXISTS doors (currentLoc TEXT NOT NULL PRIMARY KEY, loc1 TEXT, loc2 TEXT, displayLoc TEXT, worldName TEXT);";
         try {
-            Connection connCreate = DriverManager.getConnection(Plugin.url);
             Connection conn = DriverManager.getConnection(Plugin.url);
-
-            Statement stm = connCreate.createStatement();
-            stm.execute(tableCreate);
             String sql = "SELECT * FROM doors;";
             PreparedStatement pstm = conn.prepareStatement(sql);
             ResultSet results = pstm.executeQuery();
@@ -65,6 +56,7 @@ public class DoorHandler {
                 display.setBillboard(Billboard.CENTER);
                 addDoor(new DarkMCDoor(new flooredLoc(locOfDoor), display, new flooredLoc(loc1), new flooredLoc(loc2)));
             }
+            conn.close();
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             System.err.println(e.getMessage());

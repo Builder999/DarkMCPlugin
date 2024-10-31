@@ -21,6 +21,9 @@ public class BlockPlaceHandler implements Listener{
             event.setCancelled(true);
             return;
         }
+        if (BlockHandler.numOfBlocksFromPlayer(event.getPlayer().getUniqueId().toString()) > 20){
+            return;
+        }
         BlockHandler.addBlock(event.getPlayer().getUniqueId().toString(), event.getBlockPlaced());
 
     }

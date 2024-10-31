@@ -24,7 +24,6 @@ public class flooredLoc extends Location{
 
     @Override
     public boolean equals(Object obj) {
-        // TODO Auto-generated method stub
         if (getClass() != obj.getClass()){
             return false;
         }

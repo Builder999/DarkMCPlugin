@@ -43,8 +43,16 @@ public class BlockHandler {
                 blockToBreak.breakNaturally();
                 Bukkit.broadcastMessage("Removing Block");
             }
+            blocks.get(playerUUID).clear();
         }
-        blocks.get(playerUUID).clear();
+    }
+
+    public static int numOfBlocksFromPlayer(String playerUUID){
+        ArrayList<Block> blockList = blocks.get(playerUUID);
+        if (blockList != null){
+            return blockList.size();
+        }
+        return 0;
     }
 
 }
