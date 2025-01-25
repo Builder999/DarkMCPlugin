@@ -2,19 +2,15 @@ package com.bubbaj2016.darkmc;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.command.CommandSender;
 
 import java.sql.Connection;
 
 import org.bukkit.entity.Display.Billboard;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.TextDisplay;
-import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.DriverManager;

@@ -7,6 +7,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 
 import com.bubbaj2016.darkmc.BlockHandler;
 import com.bubbaj2016.darkmc.DoorHandler;
+import com.bubbaj2016.darkmc.Plugin;
 import com.bubbaj2016.darkmc.flooredLoc;
 
 
@@ -21,7 +22,7 @@ public class BlockPlaceHandler implements Listener{
             event.setCancelled(true);
             return;
         }
-        if (BlockHandler.numOfBlocksFromPlayer(event.getPlayer().getUniqueId().toString()) > 20){
+        if (BlockHandler.numOfBlocksFromPlayer(event.getPlayer().getUniqueId().toString()) > Plugin.getPlugin().getConfig().getInt("maxBlocks")){
             return;
         }
         BlockHandler.addBlock(event.getPlayer().getUniqueId().toString(), event.getBlockPlaced());

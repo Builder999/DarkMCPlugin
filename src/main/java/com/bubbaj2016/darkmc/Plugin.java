@@ -2,10 +2,13 @@ package com.bubbaj2016.darkmc;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.IOException;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Connection;
+
+import com.bubbaj2016.darkmc.commands.JobCommand;
 import com.bubbaj2016.darkmc.commands.KeyCommand;
 import com.bubbaj2016.darkmc.commands.LocWandCommand;
 import com.bubbaj2016.darkmc.commands.Money;
@@ -40,6 +43,9 @@ public class Plugin extends JavaPlugin {
         getCommand("LocWandCommand").setExecutor(new LocWandCommand());
         getCommand("RemoveBlocksCommand").setExecutor(new RemoveBlocksCommand());
         getCommand("money").setExecutor(new Money());
+        getCommand("getJobs").setExecutor(new JobCommand());
+
+
         try (var conn = DriverManager.getConnection(url)) {
             if (conn != null) {
                 Bukkit.getServer().broadcastMessage("Loaded DB");
@@ -59,6 +65,14 @@ public class Plugin extends JavaPlugin {
         plugin = this;
         DoorHandler.loadDoorsFromDatabase();
 
+        this.saveDefaultConfig();
+
+        try {
+            JobHandler.addJobs();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
     @Override
     public void onDisable() {

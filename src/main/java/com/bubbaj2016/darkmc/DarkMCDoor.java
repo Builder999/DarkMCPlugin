@@ -2,7 +2,6 @@ package com.bubbaj2016.darkmc;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.block.data.type.Door;
 import org.bukkit.entity.TextDisplay;
 import java.util.UUID;
 

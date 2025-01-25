@@ -4,14 +4,8 @@ import java.sql.DriverManager;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
 
-import javax.naming.spi.DirStateFactory.Result;
-
-import org.bukkit.Bukkit;
 public class MoneyHandler {
     public static void registerPlayer(String playerUUID){
         try  {

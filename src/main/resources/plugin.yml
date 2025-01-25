@@ -18,4 +18,8 @@ commands:
     Money:
         description: gets money balance
         usage: /<command>
+    getJobs:
+        description: gets job list
+        usage: /<command>
+    
     
