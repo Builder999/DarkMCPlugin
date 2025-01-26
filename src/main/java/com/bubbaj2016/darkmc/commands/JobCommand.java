@@ -6,7 +6,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.bubbaj2016.darkmc.JobHandler;
-import com.bubbaj2016.darkmc.MoneyHandler;
 
 public class JobCommand implements CommandExecutor{
 
@@ -16,9 +15,17 @@ public class JobCommand implements CommandExecutor{
             return false;
         }
         Player player = (Player) sender;
-        for (String jobInfo : JobHandler.getJobsList()) {
-            player.sendMessage(jobInfo);
+        if (args.length == 0){
+            for (String jobInfo : JobHandler.getJobsList()) {
+                player.sendMessage(jobInfo);
+            }
         }
+        else if (args.length == 1){
+            if (args[0].equals("getJobName")){
+                player.sendMessage(JobHandler.getPlayerJob(player.getUniqueId().toString()).getName());
+            }
+        }
+        
         return true;
     }
 }
