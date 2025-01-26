@@ -8,14 +8,22 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Display.Billboard;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.TextDisplay;
 import org.bukkit.inventory.ItemStack;
 
 public class JobHandler {
     static ArrayList<Job> jobs = new ArrayList<>();
     static HashMap<String, Job> playerJobs = new HashMap<>();
-    static public void addJobs() throws IOException{
+
+    static HashMap<Player, TextDisplay> jobLabel = new HashMap<>();
+
+    public static void addJobs() throws IOException{
         File[] files = Plugin.getPlugin().getDataFolder().listFiles();
         if (files.length == 1){
             YamlConfiguration templateConfig = new YamlConfiguration();
@@ -39,7 +47,7 @@ public class JobHandler {
         }
     }
 
-    static public ArrayList<String> getJobsList(){
+    public static ArrayList<String> getJobsList(){
         ArrayList<String> jobList = new ArrayList<>();
         for (Job job: jobs){
             String stringToAdd = "Name: " + job.name + " Category: " + job.category + " Max Slots: " + job.maxSlots + " items: ";
@@ -51,7 +59,7 @@ public class JobHandler {
         return jobList;
     }
 
-    static public int getNumPeopleOnJob(Job job){
+    public static int getNumPeopleOnJob(Job job){
         int i = 0;
         for (Job jobIndex : playerJobs.values()){
             if (jobIndex.equals(job)){
@@ -60,11 +68,11 @@ public class JobHandler {
         }
         return i;
     }
-    static public void assignJob(String PlayerID, Job job){
+    public static void assignJob(String PlayerID, Job job){
         playerJobs.put(PlayerID, job);
     }
 
-    static public void assignJob(String playerID, String jobName){
+    public static void assignJob(String playerID, String jobName){
         playerJobs.put(playerID, getJobFromJobName(jobName));
         ArrayList<String> items = getJobFromJobName(jobName).getitems();
         for (String itemName : items) {
@@ -73,10 +81,10 @@ public class JobHandler {
             Bukkit.getPlayer(UUID.fromString(playerID)).getInventory().addItem(new ItemStack(Material.matchMaterial(itemInfo[0]),Integer.parseInt(itemInfo[1])));
         }
     }
-    static public void removePlayerFromJobList(String PlayerID){
+    public static void removePlayerFromJobList(String PlayerID){
         playerJobs.remove(PlayerID);
     }
-    static public Job getJobFromJobName(String jobName){
+    public static Job getJobFromJobName(String jobName){
         for (Job job : jobs) {
             if (jobName.equals(job.name)){
                 return job;
@@ -84,11 +92,26 @@ public class JobHandler {
         }
         return null;
     }
-    static public Job getPlayerJob(String PlayerID){
+    public static Job getPlayerJob(String PlayerID){
         if (playerJobs.get(PlayerID).equals(null)){
             assignJob(PlayerID, "Civilian");
         }
         return playerJobs.get(PlayerID);
     }
 
+    public static void addJobBar(Player player){
+        World world = player.getWorld();
+        TextDisplay display = world.spawn(player.getLocation().add(0, 1, 0), TextDisplay.class);
+        display.setText(getPlayerJob(player.getUniqueId().toString()).getName());
+        display.setVisibleByDefault(true);
+        display.setBillboard(Billboard.CENTER);
+        player.addPassenger(display);
+        jobLabel.put(player, display);
+    }
+
+    public static void removeText(Player player){
+        TextDisplay display = jobLabel.get(player);
+        display.remove();
+        jobLabel.remove(player);
+    }
 }

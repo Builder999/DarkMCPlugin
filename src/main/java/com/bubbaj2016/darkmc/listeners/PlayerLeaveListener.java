@@ -1,6 +1,6 @@
 package com.bubbaj2016.darkmc.listeners;
 
-import org.bukkit.Bukkit;
+import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -16,5 +16,6 @@ public class PlayerLeaveListener implements Listener {
         DoorHandler.removeOwnerFromDoors(event.getPlayer().getUniqueId().toString());
         JobHandler.removePlayerFromJobList(event.getPlayer().getUniqueId().toString());
         event.getPlayer().getInventory().clear();
+        JobHandler.removeText(event.getPlayer());
     }
 }

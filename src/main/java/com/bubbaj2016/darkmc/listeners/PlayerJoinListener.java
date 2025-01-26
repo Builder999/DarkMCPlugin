@@ -15,6 +15,7 @@ public class PlayerJoinListener implements Listener {
             MoneyHandler.registerPlayer(event.getPlayer().getUniqueId().toString());
         }
         JobHandler.assignJob(event.getPlayer().getUniqueId().toString(), "Civilian");
+        JobHandler.addJobBar(event.getPlayer());
     }
 
 }
