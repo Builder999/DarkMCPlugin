@@ -39,6 +39,6 @@ public class flooredLoc extends Location{
             }
         }
 
-        return true;
+        return false;
     }
 }

@@ -2,11 +2,15 @@ package com.bubbaj2016.darkmc;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.configuration.file.YamlConfiguration;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 
 import org.bukkit.entity.Display.Billboard;
@@ -18,48 +22,38 @@ import java.sql.DriverManager;
 public class DoorHandler {
     static ArrayList<DarkMCDoor> doors = new ArrayList<>();
 
-    public static void saveDoorToDatabase(DarkMCDoor door){
-        try {
-        Connection conn2 = DriverManager.getConnection(Plugin.url);
-        String sql = "INSERT INTO doors VALUES(?,?,?,?,?)";
-        PreparedStatement pstm = conn2.prepareStatement(sql);
-        pstm.setString(1, Utilities.locToDBString(door.getDoorLoc()));
-        pstm.setString(2, Utilities.locToDBString(door.loc1));
-        pstm.setString(3, Utilities.locToDBString(door.loc2));
-        pstm.setString(4, Utilities.locToDBString(door.getSignLoc()));
-        pstm.setString(5, door.getDoorLoc().getWorld().getName());
-
-        pstm.executeUpdate();
-        conn2.close();
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
-        }
+    public static void saveDoorToDatabase(DarkMCDoor door) throws IOException{
+        String doorsFolder = Plugin.getPlugin().getDataFolder().getAbsolutePath().toString()+"/doors.yaml";
+        YamlConfiguration config = YamlConfiguration.loadConfiguration(new File(doorsFolder));
+        String data =
+            Utilities.locToDBString(door.getDoorLoc())+","+
+            Utilities.locToDBString(door.loc1)+","+
+            Utilities.locToDBString(door.loc2)+","+
+            Utilities.locToDBString(door.getSignLoc())+','+
+            door.getDoorLoc().getWorld().getName();
+        List<String> doors = config.getStringList("doors");
+        doors.add(data);
+        config.set("doors", doors);
+        config.save(doorsFolder);        
     }
 
     public static void loadDoorsFromDatabase(){
-        try {
-            Connection conn = DriverManager.getConnection(Plugin.url);
-            String sql = "SELECT * FROM doors;";
-            PreparedStatement pstm = conn.prepareStatement(sql);
-            ResultSet results = pstm.executeQuery();
-            while (results.next()){
-                World world = Bukkit.getServer().getWorld(results.getString(5));
-                Location locOfDoor = Utilities.stringToLoc(world, results.getString(1));
-                Location loc1 = Utilities.stringToLoc(world, results.getString(2));
-                Location loc2 = Utilities.stringToLoc(world, results.getString(3));
-                TextDisplay display = world.spawn(Utilities.stringToLoc(world, results.getString(4)), TextDisplay.class);
+            YamlConfiguration config = YamlConfiguration.loadConfiguration(new File(Plugin.getPlugin().getDataFolder().getAbsolutePath().toString()+"/doors.yaml"));
+            List<String> doorList = config.getStringList("doors");
+            for (String string : doorList) {
+                System.out.println(string);
+                String[] args = string.split(",");
+                World world = Bukkit.getServer().getWorld(args[4]);
+                Location locOfDoor = Utilities.stringToLoc(world, args[0]);
+                Location loc1 = Utilities.stringToLoc(world, args[1]);
+                Location loc2 = Utilities.stringToLoc(world, args[2]);
+                TextDisplay display = world.spawn(Utilities.stringToLoc(world, args[3]), TextDisplay.class);
                 display.setText("Owned By: ");
                 display.setVisibleByDefault(true);
                 display.setBillboard(Billboard.CENTER);
                 display.setCustomName("DoorLabel");
-                addDoor(new DarkMCDoor(new flooredLoc(locOfDoor), display, new flooredLoc(loc1), new flooredLoc(loc2)));
+                addDoor(new DarkMCDoor(new flooredLoc(locOfDoor), display, new flooredLoc(loc1), new flooredLoc(loc2)));   
             }
-            conn.close();
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            System.err.println(e.getMessage());
-        }
-
     }
 
 
@@ -131,7 +125,15 @@ public class DoorHandler {
     public static DarkMCDoor getDoorByLoc(flooredLoc loc){
         for (DarkMCDoor darkMCDoor : doors) {
             if (darkMCDoor.getDoorLoc().equals(loc)){
+                System.out.println("Equals");
+                System.out.println(darkMCDoor.getDoorLoc());
+                System.out.println(loc);
                 return darkMCDoor;
+            }
+            else {
+                System.out.println("Not Equals");
+                System.out.println(darkMCDoor.getDoorLoc());
+                System.out.println(loc);
             }
         }
         return null;

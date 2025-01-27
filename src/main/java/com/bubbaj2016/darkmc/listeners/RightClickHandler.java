@@ -1,5 +1,7 @@
 package com.bubbaj2016.darkmc.listeners;
 
+import java.io.IOException;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -81,8 +83,12 @@ public class RightClickHandler implements Listener{
                             flooredLoc loc2 = new flooredLoc(event.getPlayer().getWorld(), con.get(new NamespacedKey(Plugin.getPlugin(), "x2"), PersistentDataType.INTEGER), con.get(new NamespacedKey(Plugin.getPlugin(), "y2"), PersistentDataType.INTEGER), con.get(new NamespacedKey(Plugin.getPlugin(), "z2"), PersistentDataType.INTEGER));
 
                             DoorHandler.setArea(loc1, loc2, doorLoc);
-                            Bukkit.getServer().broadcastMessage(DoorHandler.getDoorByLoc(doorLoc).printLocs());
-                            DoorHandler.saveDoorToDatabase(DoorHandler.getDoorByLoc(doorLoc));
+                            try {
+                                DoorHandler.saveDoorToDatabase(DoorHandler.getDoorByLoc(doorLoc));
+                            } catch (IOException e) {
+                                // TODO Auto-generated catch block
+                                e.printStackTrace();
+                            }
 
                         }
                         meta.getPersistentDataContainer().remove(new NamespacedKey(Plugin.getPlugin(), "x1"));
@@ -145,7 +151,7 @@ public class RightClickHandler implements Listener{
             loc = loc.subtract(0, 1, 0);
         }
         //loc = Utilities.stripRotation(loc);
-        flooredLoc doorLoc = new flooredLoc(player.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
+        flooredLoc doorLoc = new flooredLoc(player.getWorld(), loc.getBlockZ(), loc.getBlockY(), loc.getBlockX());
         Directional direction = (Directional) clickedBlock.getBlockData();
 
         if (direction.getFacing() == BlockFace.NORTH){
@@ -166,6 +172,7 @@ public class RightClickHandler implements Listener{
         display.setText("Owned By: ");
         display.setVisibleByDefault(true);
         display.setBillboard(Billboard.CENTER);
+        display.setCustomName("DoorLabel");
         DoorHandler.addDoor(doorLoc, display);
     }
 }
