@@ -10,6 +10,7 @@ import org.bukkit.World;
 import java.sql.Connection;
 
 import org.bukkit.entity.Display.Billboard;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.TextDisplay;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -50,6 +51,7 @@ public class DoorHandler {
                 display.setText("Owned By: ");
                 display.setVisibleByDefault(true);
                 display.setBillboard(Billboard.CENTER);
+                display.setCustomName("DoorLabel");
                 addDoor(new DarkMCDoor(new flooredLoc(locOfDoor), display, new flooredLoc(loc1), new flooredLoc(loc2)));
             }
             conn.close();
@@ -154,13 +156,14 @@ public class DoorHandler {
         }
     }
 
-    public static void removeDoorTextEntityFromWorld(DarkMCDoor door){
-        door.getSign().remove();
-    }
-
     public static void removeTextEntities(){
-        for (DarkMCDoor darkMCDoor : doors) {
-            removeDoorTextEntityFromWorld(darkMCDoor);
+        for (Entity ent : Plugin.getPlugin().getServer().getWorlds().get(0).getEntities()) {
+            if (ent instanceof TextDisplay){
+                if (ent.getCustomName().equals("DoorLabel")){
+                    System.out.println("Removed Door");
+                    ent.remove();
+                }
+            }
         }
     }
 

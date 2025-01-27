@@ -12,6 +12,7 @@ import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Display.Billboard;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TextDisplay;
@@ -21,15 +22,18 @@ public class JobHandler {
     static ArrayList<Job> jobs = new ArrayList<>();
     static HashMap<String, Job> playerJobs = new HashMap<>();
 
-    static HashMap<Player, TextDisplay> jobLabel = new HashMap<>();
+    static HashMap<Player, Entity> jobLabel = new HashMap<>();
 
     public static void addJobs() throws IOException{
-        File[] files = Plugin.getPlugin().getDataFolder().listFiles();
-        if (files.length == 1){
+        String jobFolder = Plugin.getPlugin().getDataFolder().getAbsolutePath()+ "/Jobs";
+
+        File jobFolderFile = new File(jobFolder);
+        jobFolderFile.mkdirs();
+        File[] files = jobFolderFile.listFiles();
+        if (files.length == 0){
             YamlConfiguration templateConfig = new YamlConfiguration();
             ArrayList<String> itemList = new ArrayList<>();
-            String path = Plugin.getPlugin().getDataFolder().getAbsolutePath();
-            path = path + "/Civilian.yaml";
+            String path = jobFolder + "/Civilian.yaml";
             itemList.add("Dirt 64");
             templateConfig.set("name", "Civilian");
             templateConfig.set("category", "Civilian");
@@ -101,17 +105,24 @@ public class JobHandler {
 
     public static void addJobBar(Player player){
         World world = player.getWorld();
-        TextDisplay display = world.spawn(player.getLocation().add(0, 1, 0), TextDisplay.class);
+        TextDisplay display = world.spawn(player.getLocation(), TextDisplay.class);
+        ArmorStand stand = world.spawn(player.getLocation(), ArmorStand.class);
         display.setText(getPlayerJob(player.getUniqueId().toString()).getName());
         display.setVisibleByDefault(true);
         display.setBillboard(Billboard.CENTER);
-        player.addPassenger(display);
-        jobLabel.put(player, display);
+        stand.addPassenger(display);
+        stand.setSmall(true);
+        stand.setVisible(false);
+        stand.setCollidable(false);
+        player.addPassenger(stand);
+        jobLabel.put(player, stand);
     }
 
     public static void removeText(Player player){
-        TextDisplay display = jobLabel.get(player);
-        display.remove();
+        for (Entity entitity : jobLabel.get(player).getPassengers()){
+            entitity.remove();
+        }
+        jobLabel.get(player).remove();
         jobLabel.remove(player);
     }
 }

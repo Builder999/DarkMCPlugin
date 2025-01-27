@@ -63,6 +63,7 @@ public class Plugin extends JavaPlugin {
             System.err.println(e.getMessage());
         }
         plugin = this;
+        DoorHandler.removeTextEntities();
         DoorHandler.loadDoorsFromDatabase();
 
         this.saveDefaultConfig();
@@ -73,12 +74,12 @@ public class Plugin extends JavaPlugin {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+
+
     }
     @Override
     public void onDisable() {
         getLogger().info("Plugin is Disabling!");
-        DoorHandler.removeTextEntities();
-
     }
     public static JavaPlugin getPlugin() {
         return plugin;
