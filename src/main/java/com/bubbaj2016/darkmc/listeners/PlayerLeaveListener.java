@@ -1,6 +1,5 @@
 package com.bubbaj2016.darkmc.listeners;
 
-import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;

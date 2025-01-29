@@ -1,41 +1,37 @@
 package com.bubbaj2016.darkmc.listeners;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected;
 import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.type.Door;
-import org.bukkit.entity.Player;
 import org.bukkit.entity.TextDisplay;
 import org.bukkit.entity.Display.Billboard;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
-
 import com.bubbaj2016.darkmc.DoorHandler;
 import com.bubbaj2016.darkmc.flooredLoc;
 import com.bubbaj2016.darkmc.ItemManager;
-import com.bubbaj2016.darkmc.Plugin;
-
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 
 
 
 public class RightClickHandler implements Listener{
+    HashMap<String, ArrayList<Location>> locWandMap = new HashMap<>();
     @EventHandler
-    public void onRightClick(PlayerInteractEvent event){
+    public void onRightClick(PlayerInteractEvent event) throws IOException{
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK){
             if (event.getItem() != null){
                  if (event.getItem().getItemMeta().equals(ItemManager.key.getItemMeta())){
@@ -65,61 +61,33 @@ public class RightClickHandler implements Listener{
                 }
 
                 else if (event.getItem().getItemMeta().getDisplayName().equals(ItemManager.locWand.getItemMeta().getDisplayName())){
-                    ItemMeta meta = event.getItem().getItemMeta();
-
-                    if (meta.getPersistentDataContainer().has(new NamespacedKey(Plugin.getPlugin(), "x2"))){
-                        if (event.getClickedBlock().getType() == Material.OAK_DOOR){
-                            event.setCancelled(true);
-                            Bukkit.getServer().broadcastMessage("Assigning Door");
-                            Location tempDoorLoc = event.getClickedBlock().getLocation();
-                            Bisected bisect = (Bisected) event.getClickedBlock().getBlockData();
-                            if (bisect.getHalf() == Half.TOP){
-                                tempDoorLoc = tempDoorLoc.subtract(0, 1, 0);
-                            }
-                            addDoor(event.getPlayer(), event.getClickedBlock());
-                            flooredLoc doorLoc = new flooredLoc(tempDoorLoc);
-                            PersistentDataContainer con = event.getItem().getItemMeta().getPersistentDataContainer();
-                            flooredLoc loc1 = new flooredLoc(event.getPlayer().getWorld(), con.get(new NamespacedKey(Plugin.getPlugin(), "x1"), PersistentDataType.INTEGER), con.get(new NamespacedKey(Plugin.getPlugin(), "y1"), PersistentDataType.INTEGER), con.get(new NamespacedKey(Plugin.getPlugin(), "z1"), PersistentDataType.INTEGER));
-                            flooredLoc loc2 = new flooredLoc(event.getPlayer().getWorld(), con.get(new NamespacedKey(Plugin.getPlugin(), "x2"), PersistentDataType.INTEGER), con.get(new NamespacedKey(Plugin.getPlugin(), "y2"), PersistentDataType.INTEGER), con.get(new NamespacedKey(Plugin.getPlugin(), "z2"), PersistentDataType.INTEGER));
-
-                            DoorHandler.setArea(loc1, loc2, doorLoc);
-                            try {
-                                DoorHandler.saveDoorToDatabase(DoorHandler.getDoorByLoc(doorLoc));
-                            } catch (IOException e) {
-                                // TODO Auto-generated catch block
-                                e.printStackTrace();
-                            }
-
-                        }
-                        meta.getPersistentDataContainer().remove(new NamespacedKey(Plugin.getPlugin(), "x1"));
-                        meta.getPersistentDataContainer().remove(new NamespacedKey(Plugin.getPlugin(), "x2"));
+                    ArrayList<Location> location = locWandMap.get(event.getPlayer().getUniqueId().toString());
+                    String playerID = event.getPlayer().getUniqueId().toString();
+                    Block clickedBlock = event.getClickedBlock();
+                    if (location == null){
+                        location = new ArrayList<Location>();
+                        location.add(clickedBlock.getLocation());
+                        locWandMap.put(playerID, location);
+                        event.getPlayer().sendMessage("Assigning Loc 1: " + location.get(0).toString());
                     }
-                    else {
-                        if (!meta.getPersistentDataContainer().has(new NamespacedKey(Plugin.getPlugin(), "x1"))){ 
-                            meta.getPersistentDataContainer().set(new NamespacedKey(Plugin.getPlugin(), "x1"), PersistentDataType.INTEGER, event.getClickedBlock().getLocation().getBlockX());
-                            meta.getPersistentDataContainer().set(new NamespacedKey(Plugin.getPlugin(), "y1"), PersistentDataType.INTEGER, event.getClickedBlock().getLocation().getBlockY());
-                            meta.getPersistentDataContainer().set(new NamespacedKey(Plugin.getPlugin(), "z1"), PersistentDataType.INTEGER, event.getClickedBlock().getLocation().getBlockZ());
-                            Bukkit.getServer().broadcastMessage("Assigning Loc 1");
-                            event.getItem().setItemMeta(meta);
-                            PersistentDataContainer con = event.getItem().getItemMeta().getPersistentDataContainer();
-
-                            flooredLoc floorLoc = new flooredLoc(event.getPlayer().getWorld(), con.get(new NamespacedKey(Plugin.getPlugin(), "x1"), PersistentDataType.INTEGER), con.get(new NamespacedKey(Plugin.getPlugin(), "y1"), PersistentDataType.INTEGER), con.get(new NamespacedKey(Plugin.getPlugin(), "z1"), PersistentDataType.INTEGER));
-                            Bukkit.getServer().broadcastMessage(floorLoc.toString());
-
-                        }
-                        else if (!meta.getPersistentDataContainer().has(new NamespacedKey(Plugin.getPlugin(), "x2"))){
-                            meta.getPersistentDataContainer().set(new NamespacedKey(Plugin.getPlugin(), "x2"), PersistentDataType.INTEGER, event.getClickedBlock().getLocation().getBlockX());
-                            meta.getPersistentDataContainer().set(new NamespacedKey(Plugin.getPlugin(), "y2"), PersistentDataType.INTEGER, event.getClickedBlock().getLocation().getBlockY());
-                            meta.getPersistentDataContainer().set(new NamespacedKey(Plugin.getPlugin(), "z2"), PersistentDataType.INTEGER, event.getClickedBlock().getLocation().getBlockZ());
-                            Bukkit.getServer().broadcastMessage("Assigning Loc 2");
-                            event.getItem().setItemMeta(meta);
-                            PersistentDataContainer con = event.getItem().getItemMeta().getPersistentDataContainer();
-
-                            flooredLoc floorLoc = new flooredLoc(event.getPlayer().getWorld(), con.get(new NamespacedKey(Plugin.getPlugin(), "x2"), PersistentDataType.INTEGER), con.get(new NamespacedKey(Plugin.getPlugin(), "y2"), PersistentDataType.INTEGER), con.get(new NamespacedKey(Plugin.getPlugin(), "z2"), PersistentDataType.INTEGER));
-                            Bukkit.getServer().broadcastMessage(floorLoc.toString());
-                        }
+                    else if (location.size() == 1) {
+                        location.add(clickedBlock.getLocation());
+                        locWandMap.put(playerID, location);
+                        event.getPlayer().sendMessage("Assigning Loc 2: " + location.get(1).toString());
                     }
-                    event.getItem().setItemMeta(meta);
+                    else if (location.size() == 2){
+                        addDoor(clickedBlock);
+                        Location tempDoorLoc = event.getClickedBlock().getLocation();
+                        Bisected bisect = (Bisected) event.getClickedBlock().getBlockData();
+                        if (bisect.getHalf() == Half.TOP){
+                            tempDoorLoc = tempDoorLoc.subtract(0, 1, 0);
+                        }
+                        DoorHandler.setArea(new flooredLoc(location.get(0)), new flooredLoc(tempDoorLoc), new flooredLoc(tempDoorLoc));
+                        DoorHandler.saveDoorToDatabase(DoorHandler.getDoorByLoc(new flooredLoc(tempDoorLoc)));
+                        locWandMap.remove(playerID);
+                        event.getPlayer().sendMessage("Assigning Door: " + clickedBlock.getLocation().toString());
+                        event.setCancelled(true);
+                    }
                 }
             }
 
@@ -144,14 +112,15 @@ public class RightClickHandler implements Listener{
         
     }
 
-    private void addDoor(Player player, Block clickedBlock){
+    private void addDoor(Block clickedBlock){
+        World world = clickedBlock.getLocation().getWorld();
         Door door = (Door) clickedBlock.getBlockData();
         Location loc = clickedBlock.getLocation();
         if (door.getHalf() == Half.TOP){
             loc = loc.subtract(0, 1, 0);
         }
         //loc = Utilities.stripRotation(loc);
-        flooredLoc doorLoc = new flooredLoc(player.getWorld(), loc.getBlockZ(), loc.getBlockY(), loc.getBlockX());
+        flooredLoc doorLoc = new flooredLoc(world, loc.getBlockZ(), loc.getBlockY(), loc.getBlockX());
         Directional direction = (Directional) clickedBlock.getBlockData();
 
         if (direction.getFacing() == BlockFace.NORTH){
@@ -168,7 +137,7 @@ public class RightClickHandler implements Listener{
             Bukkit.getServer().getLogger().info(direction.getFacing().toString());
             loc = loc.add(1.5, 1, 0);
         }
-        TextDisplay display = player.getWorld().spawn(loc, TextDisplay.class);
+        TextDisplay display = world.spawn(loc, TextDisplay.class);
         display.setText("Owned By: ");
         display.setVisibleByDefault(true);
         display.setBillboard(Billboard.CENTER);

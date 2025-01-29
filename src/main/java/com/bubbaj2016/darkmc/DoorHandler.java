@@ -1,6 +1,5 @@
 package com.bubbaj2016.darkmc;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,14 +10,9 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.Connection;
-
 import org.bukkit.entity.Display.Billboard;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.TextDisplay;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.DriverManager;
 public class DoorHandler {
     static ArrayList<DarkMCDoor> doors = new ArrayList<>();
 
@@ -161,7 +155,7 @@ public class DoorHandler {
     public static void removeTextEntities(){
         for (Entity ent : Plugin.getPlugin().getServer().getWorlds().get(0).getEntities()) {
             if (ent instanceof TextDisplay){
-                if (ent.getCustomName().equals("DoorLabel")){
+                if (ent.getCustomName() != null && ent.getCustomName().equals("DoorLabel")){
                     System.out.println("Removed Door");
                     ent.remove();
                 }
