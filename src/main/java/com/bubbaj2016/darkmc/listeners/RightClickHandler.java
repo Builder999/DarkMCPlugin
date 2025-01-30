@@ -35,7 +35,7 @@ public class RightClickHandler implements Listener{
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK){
             if (event.getItem() != null){
                  if (event.getItem().getItemMeta().equals(ItemManager.key.getItemMeta())){
-                    if (event.getClickedBlock().getType() == Material.OAK_DOOR){
+                    if (event.getClickedBlock().getType().toString().contains("DOOR")){
                         Location loc = event.getClickedBlock().getLocation();
                         Bisected bisect = (Bisected) event.getClickedBlock().getBlockData();
                         if (bisect.getHalf() == Half.TOP){
@@ -75,7 +75,7 @@ public class RightClickHandler implements Listener{
                         locWandMap.put(playerID, location);
                         event.getPlayer().sendMessage("Assigning Loc 2: " + location.get(1).toString());
                     }
-                    else if (location.size() == 2){
+                    else if (location.size() == 2 && event.getClickedBlock().getType().toString().contains("DOOR")){
                         addDoor(clickedBlock);
                         Location tempDoorLoc = event.getClickedBlock().getLocation();
                         Bisected bisect = (Bisected) event.getClickedBlock().getBlockData();
@@ -93,7 +93,7 @@ public class RightClickHandler implements Listener{
 
 
             if (event.getItem() == null){
-                if (event.getClickedBlock().getType() == Material.OAK_DOOR){
+                if (event.getClickedBlock().getType().toString().contains("DOOR")){
                     Bisected bisect = (Bisected) event.getClickedBlock().getBlockData();
                     Location loc = event.getClickedBlock().getLocation();
                     if (bisect.getHalf() == Half.TOP){

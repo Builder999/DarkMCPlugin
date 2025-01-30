@@ -43,7 +43,7 @@ public class Plugin extends JavaPlugin {
         plugin = this;
         DoorHandler.removeTextEntities();
         DoorHandler.loadDoorsFromDatabase();
-
+        MoneyHandler.loadValues();
         this.saveDefaultConfig();
 
         try {

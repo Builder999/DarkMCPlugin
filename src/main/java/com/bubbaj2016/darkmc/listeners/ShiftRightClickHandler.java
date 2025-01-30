@@ -15,7 +15,7 @@ public class ShiftRightClickHandler implements Listener{
     public void onShiftRightBreak(PlayerInteractEvent event){
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getPlayer().isSneaking()){
             if (event.getItem() == null){
-                if (event.getClickedBlock().getType() == Material.OAK_DOOR){
+                if (event.getClickedBlock().getType().toString().contains("DOOR")){
                     flooredLoc loc = new flooredLoc(event.getClickedBlock().getLocation());
                     if (DoorHandler.doorAdded(loc)){
                         if (DoorHandler.getDoorOwner(loc).equals(event.getPlayer().getUniqueId().toString())){
