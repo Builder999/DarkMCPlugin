@@ -1,12 +1,8 @@
 package com.bubbaj2016.darkmc;
 
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
 
 import com.bubbaj2016.darkmc.commands.JobCommand;
 import com.bubbaj2016.darkmc.commands.KeyCommand;
@@ -44,24 +40,6 @@ public class Plugin extends JavaPlugin {
         getCommand("RemoveBlocksCommand").setExecutor(new RemoveBlocksCommand());
         getCommand("money").setExecutor(new Money());
         getCommand("getJobs").setExecutor(new JobCommand());
-
-
-        try (var conn = DriverManager.getConnection(url)) {
-            if (conn != null) {
-                Bukkit.getServer().broadcastMessage("Loaded DB");
-                String sql = "CREATE TABLE IF NOT EXISTS money (playerUUID TEXT NOT NULL PRIMARY KEY, money REAL);";
-                String sql2 = "CREATE TABLE IF NOT EXISTS doors (currentLoc TEXT NOT NULL PRIMARY KEY, loc1 TEXT, loc2 TEXT, displayLoc TEXT, worldName TEXT);";
-
-                Statement stm = conn.createStatement();
-                stm.execute(sql);
-                Statement stm2 = conn.createStatement();
-                stm2.executeQuery(sql2);
-
-            }
-            conn.close();
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
-        }
         plugin = this;
         DoorHandler.removeTextEntities();
         DoorHandler.loadDoorsFromDatabase();
@@ -80,6 +58,11 @@ public class Plugin extends JavaPlugin {
     @Override
     public void onDisable() {
         getLogger().info("Plugin is Disabling!");
+        try {
+            MoneyHandler.saveMoney();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     public static JavaPlugin getPlugin() {
         return plugin;
