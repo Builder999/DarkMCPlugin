@@ -1,7 +1,7 @@
+api-version: 1.20
 main: com.bubbaj2016.darkmc.Plugin
 name: darkmc
 version: 1.0
-
 commands:
     helloWorld:
         description: Hello, World!
@@ -20,6 +20,9 @@ commands:
         usage: /<command>
     getJobs:
         description: gets job list
+        usage: /<command>
+    shop:
+        description: opens shop
         usage: /<command>
     
     

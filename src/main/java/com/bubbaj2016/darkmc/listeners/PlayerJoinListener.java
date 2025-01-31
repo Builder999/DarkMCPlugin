@@ -4,18 +4,12 @@ import org.bukkit.event.Listener;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
-
-import com.bubbaj2016.darkmc.JobHandler;
-import com.bubbaj2016.darkmc.MoneyHandler;
+import com.bubbaj2016.darkmc.Utilities;
 
 public class PlayerJoinListener implements Listener {
     @EventHandler
     public void onPlayerJoinServer(PlayerJoinEvent event){
-        if (MoneyHandler.loadPlayerBalance(event.getPlayer().getUniqueId().toString()) == -1){
-            MoneyHandler.registerPlayer(event.getPlayer().getUniqueId().toString());
-        }
-        JobHandler.assignJob(event.getPlayer().getUniqueId().toString(), "Civilian");
-        JobHandler.addJobBar(event.getPlayer());
+        Utilities.playerSetup(event.getPlayer());
     }
 
 }

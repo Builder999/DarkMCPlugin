@@ -31,23 +31,13 @@ public class JobHandler {
         jobFolderFile.mkdirs();
         File[] files = jobFolderFile.listFiles();
         if (files.length == 0){
-            YamlConfiguration templateConfig = new YamlConfiguration();
-            ArrayList<String> itemList = new ArrayList<>();
-            String path = jobFolder + "/Civilian.yaml";
-            itemList.add("Dirt 64");
-            templateConfig.set("name", "Civilian");
-            templateConfig.set("category", "Civilian");
-            templateConfig.set("maxSlots", 10);
-            templateConfig.set("items", itemList);
-            templateConfig.save(path);
+            createDefaultJobFile(jobFolder);
         }
         for (File file : files) {
             FileConfiguration job = YamlConfiguration.loadConfiguration(file);
             if (job.getString("name") != null){
                 jobs.add(new Job(job.getString("name"), job.getString("category"), job.getInt("maxSlots"), job.getStringList("items")));
             }
-            
-            
         }
     }
 
@@ -94,6 +84,7 @@ public class JobHandler {
                 return job;
             }
         }
+        System.out.println(jobName);
         return null;
     }
     public static Job getPlayerJob(String PlayerID){
@@ -119,10 +110,31 @@ public class JobHandler {
     }
 
     public static void removeText(Player player){
+        if (jobLabel.get(player) == null){
+            return;
+        }
+        if (jobLabel.get(player).getPassengers() == null){
+            return;
+        }
         for (Entity entitity : jobLabel.get(player).getPassengers()){
             entitity.remove();
         }
         jobLabel.get(player).remove();
         jobLabel.remove(player);
+    }
+
+    public static void createDefaultJobFile(String jobFolder) throws IOException{
+        YamlConfiguration templateConfig = new YamlConfiguration();
+            ArrayList<String> itemList = new ArrayList<>();
+            ArrayList<String> shopList = new ArrayList<>();
+            String path = jobFolder + "/Civilian.yaml";
+            itemList.add("Dirt 64");
+            shopList.add("Iron Sword,1,100");
+            templateConfig.set("name", "Civilian");
+            templateConfig.set("category", "Civilian");
+            templateConfig.set("maxSlots", 10);
+            templateConfig.set("items", itemList);
+            templateConfig.set("shopItems", shopList);
+            templateConfig.save(path);
     }
 }

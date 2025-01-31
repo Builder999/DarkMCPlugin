@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 
 public class Utilities {
     public static Entity getEntityByUniqueId(UUID uniqueId) {
@@ -40,6 +41,15 @@ public class Utilities {
     public static Location stringToLoc(World world, String string){
         String[] coords = string.split(":");
         return new Location(world, Double.parseDouble(coords[0]), Double.parseDouble(coords[1]), Double.parseDouble(coords[2]));
+    }
+
+    public static void playerSetup(Player player){
+        player.getInventory().clear();
+        if (MoneyHandler.loadPlayerBalance(player.getUniqueId().toString()) == -1){
+            MoneyHandler.registerPlayer(player.getUniqueId().toString());
+        }
+        JobHandler.assignJob(player.getUniqueId().toString(), "Civilian");
+        JobHandler.addJobBar(player);
     }
 }
 
