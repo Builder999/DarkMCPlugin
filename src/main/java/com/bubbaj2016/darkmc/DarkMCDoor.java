@@ -10,6 +10,7 @@ public class DarkMCDoor {
     private TextDisplay sign;
     private String owner = "";
     private boolean locked = false;
+    boolean teamOwned = false;
     flooredLoc loc1;
     flooredLoc loc2;
     public DarkMCDoor(flooredLoc loc, TextDisplay sign){
@@ -24,6 +25,17 @@ public class DarkMCDoor {
 
     public flooredLoc getDoorLoc() {
         return doorLoc;
+    }
+    
+    public void setTeam(String team){
+        if (team.equals("")){
+            teamOwned = false;
+            setOwner("");
+            return;
+        }
+        teamOwned = true;
+        setOwner(team);
+
     }
 
     public boolean locked(){
@@ -41,6 +53,9 @@ public class DarkMCDoor {
         owner = id;
         if (id.equals("")){
             sign.setText("Owned by: ");
+        }
+        else if(teamOwned){
+            sign.setText("Owned by: " + id);
         }
         else {
             sign.setText("Owned by: " + Bukkit.getPlayer(UUID.fromString(id)).getName());
